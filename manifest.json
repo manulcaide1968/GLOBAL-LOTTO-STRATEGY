@@ -2,7 +2,7 @@
   "name": "Global Lotto Strategy",
   "short_name": "GLS",
   "description": "Pyramidal Algorithm Pro - Lottery Combinations Generator",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#030712",
   "theme_color": "#030712",
@@ -21,3 +21,4 @@
     }
   ]
 }
+
