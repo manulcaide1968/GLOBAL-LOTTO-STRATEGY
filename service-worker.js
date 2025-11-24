@@ -1,7 +1,10 @@
 const CACHE_NAME = 'gls-v1';
 const urlsToCache = [
-  '/index.html',
-  '/'
+  '/GLOBAL-LOTTO-STRATEGY/',
+  '/GLOBAL-LOTTO-STRATEGY/index.html',
+  '/GLOBAL-LOTTO-STRATEGY/manifest.json',
+  '/GLOBAL-LOTTO-STRATEGY/icon-192.png',
+  '/GLOBAL-LOTTO-STRATEGY/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
