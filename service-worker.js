@@ -1,32 +1,32 @@
-const CACHE_NAME = 'lotto-pro-cache-v1';
+const CACHE_NAME = 'lotto-pro-cache-v2'; // ¡IMPORTANTE! Cambia el nombre de la caché para forzar la actualización
 
 // Lista de archivos que queremos cachear
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  // Asegúrate de que los iconos y scripts externos estén en caché
-  // Tailwind CSS CDN:
+  // Tailwind CSS CDN (se mantiene):
   'https://cdn.tailwindcss.com', 
-  // Archivos de iconos:
-  '/icons/icon-72.png',
-  '/icons/icon-96.png',
-  '/icons/icon-128.png',
-  '/icons/icon-144.png',
-  '/icons/icon-152.png',
-  '/icons/icon-192.png',
-  '/icons/icon-384.png',
-  '/icons/icon-512.png'
+  // Archivos de iconos: RUTA AJUSTADA A LA RAÍZ (sin /icons/)
+  '/icon-72.png',
+  '/icon-96.png',
+  '/icon-128.png',
+  '/icon-144.png',
+  '/icon-152.png',
+  '/icon-192.png',
+  '/icon-384.png',
+  '/icon-512.png'
 ];
 
 // 1. Instalar y Cachear Archivos
 self.addEventListener('install', event => {
-  // Realiza la instalación y cachea los archivos estáticos
   event.waitUntil(
+    // Abrir la nueva caché (v2)
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        console.log('Opened cache v2');
+        // Esto fallará si las rutas no son correctas.
+        return cache.addAll(urlsToCache); 
       })
   );
 });
@@ -36,25 +36,23 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Devuelve el recurso en caché si existe
         if (response) {
           return response;
         }
-        // Si no está en caché, continúa con la red
         return fetch(event.request);
       })
   );
 });
 
-// 3. Limpiar Caché Vieja
+// 3. Limpiar Caché Vieja (v1)
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CACHE_NAME]; // Ahora solo permite 'lotto-pro-cache-v2'
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            // Elimina los cachés que no están en la lista blanca
+            // Elimina los cachés antiguos (como 'lotto-pro-cache-v1')
             return caches.delete(cacheName);
           }
         })
