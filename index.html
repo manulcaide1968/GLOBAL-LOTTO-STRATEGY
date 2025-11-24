@@ -6,11 +6,11 @@
     <title>Global Lotto Strategy - Pyramidal Algorithm Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#030712">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icons/icon-192.png"> 
+    <link rel="apple-touch-icon" href="/icons/icon-192.png"> 
     <style>
         /* Estilos base para el fondo y la fuente */
         body {
@@ -378,7 +378,7 @@
         // --- FUNCIONES DE NAVEGACIÓN PRINCIPAL ---
 
         function goToSimSelection() {
-             updateState({ 
+              updateState({ 
                 screen: 'simLotterySelection', 
                 simLottery: null, 
                 simBaseCount: 0, 
@@ -389,7 +389,7 @@
         }
         
         function backToContinentScreen() {
-             updateState({ screen: 'continent' });
+              updateState({ screen: 'continent' });
         }
         
         // --- MANEJADORES DE EVENTOS DE NÚMEROS BASE (Generación) ---
@@ -640,78 +640,54 @@
                         ${Object.keys(LOTTERIES).map(continent => `
                             <button
                                 onclick="updateState({ screen: 'country', selectedContinent: '${continent}' })"
-                                class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
+                                class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg transform hover:scale-[1.02] text-left"
                             >
-                                <span>${continent}</span>
-                                <span class="icon-right text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
+                                <div class="flex items-center space-x-4">
+                                    <span class="icon-globe text-2xl text-yellow-500"></span>
+                                    <h2 class="text-2xl font-bold">${continent}</h2>
+                                    <span class="ml-auto icon-right text-yellow-500"></span>
+                                </div>
                             </button>
                         `).join('')}
-                    </div>
-
-                    <div class="mt-12 p-4 rounded-xl bg-red-900/50 border border-red-700 shadow-xl text-center">
-                        <p class="text-red-400 text-lg font-bold mb-1">⚠️ IMPORTANT DISCLAIMER & RESPONSIBLE GAMING</p>
-                        <p class="text-red-300 text-sm">
-                            This application is for **entertainment and theoretical strategy only**. It is not affiliated with any official lottery organization and **does not guarantee winnings**.
-                            <br>
-                            **Gamble responsibly.** Never bet more than you can afford to lose. Must be 18+ to play. If you feel gambling is becoming a problem, seek professional help.
-                        </p>
                     </div>
                 </div>
             `;
             appContainer.innerHTML = html;
         }
 
-        // --- SIMULATOR SCREENS ---
-
-        function renderSimLotterySelectionScreen() {
-            // Recopila todas las loterías disponibles para simplificar la selección en el simulador
-            const allLotteries = Object.values(LOTTERIES).flatMap(countries => 
-                Object.values(countries).flatMap(country => 
-                    country.lotteries.map(lotto => ({
-                        ...lotto,
-                        country: country.nativeName,
-                        flag: country.flag
-                    }))
-                )
-            ).sort((a, b) => a.name.localeCompare(b.name));
-
-            const handleSelectLotto = (lottery) => {
-                updateState({ simLottery: lottery, screen: 'simBaseCountSelection' });
-            };
-
+        function renderCountryScreen() {
+            const continent = state.selectedContinent;
+            const countries = LOTTERIES[continent];
+            
             const html = `
-                <div class="screen active" id="sim-lottery-selection-screen">
-                    <button onclick="backToContinentScreen()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Main Menu
-                    </button>
+                <div class="screen active" id="country-screen">
+                    <button onclick="backToContinentScreen()" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Continents</button>
                     
-                    <div class="text-center mb-10">
-                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">Simulador: Select Lottery</h2>
-                        <p class="text-gray-400 text-lg">Choose a lottery to test the Pyramidal Algorithm.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto p-2">
-                        ${allLotteries.map(lottery => {
-                            const lotteryString = JSON.stringify(lottery).replace(/"/g, '&quot;');
+                    <h1 class="text-3xl font-extrabold text-yellow-300 mb-8">${continent} Lotteries</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${Object.keys(countries).map(countryKey => {
+                            const countryData = countries[countryKey];
                             return `
-                                <button
-                                    onclick="updateState({ simLottery: ${lotteryString}, screen: 'simBaseCountSelection' })"
-                                    class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-xl group transform hover:scale-[1.01]"
-                                >
-                                    <div class="flex items-center justify-between">
-                                        <div class="text-left">
-                                            <h3 class="text-2xl font-bold mb-1 text-white flex items-center gap-2">
-                                                <span class="flag-icon text-base">${lottery.flag}</span>
-                                                ${lottery.name}
-                                            </h3>
-                                            <p class="text-gray-400 text-sm">
-                                                ${lottery.type === 'pick5' ? 'Pick 5' : 'Pick 6'} • Range: 1-${lottery.range}
-                                                ${lottery.extra ? ` + ${lottery.extra.name}` : ''}
-                                            </p>
-                                        </div>
-                                        <span class="icon-right w-6 h-6 text-blue-400 group-hover:translate-x-2 transition-transform duration-300"></span>
+                                <div class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 shadow-lg">
+                                    <div class="flex items-center mb-4 space-x-3">
+                                        <span class="flag-icon">${countryData.flag}</span>
+                                        <h2 class="text-2xl font-bold text-gray-100">${countryData.nativeName}</h2>
                                     </div>
-                                </button>
+                                    <ul class="space-y-3">
+                                        ${countryData.lotteries.map(lotto => `
+                                            <li>
+                                                <button
+                                                    onclick="updateState({ screen: 'baseNumberCount', selectedCountry: '${countryKey}', selectedLottery: LOTTERIES['${continent}']['${countryKey}'].lotteries.find(l => l.name === '${lotto.name}') })"
+                                                    class="w-full bg-gray-700/50 hover:bg-yellow-600/50 text-gray-200 hover:text-white transition-colors duration-200 p-3 rounded-lg flex justify-between items-center"
+                                                >
+                                                    <span>${lotto.name}</span>
+                                                    <span class="icon-right text-yellow-400"></span>
+                                                </button>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
                             `;
                         }).join('')}
                     </div>
@@ -719,55 +695,266 @@
             `;
             appContainer.innerHTML = html;
         }
-
-        function renderSimBaseCountSelectionScreen() {
-            const lotto = state.simLottery;
-            const formulas = lotto.type === 'pick5' ? FORMULAS_PICK5 : FORMULAS_PICK6;
-            const minNumbers = lotto.type === 'pick5' ? 8 : 9;
-            const maxNumbers = lotto.type === 'pick5' ? 15 : 16;
-            
-            const handleSelectCount = (count) => {
-                updateState({ 
-                    screen: 'simNumberInput', 
-                    simBaseCount: count,
-                    simBaseNumbers: [], 
-                    simWinningNumbers: [],
-                    simWinningExtraNumbers: []
-                });
-            };
-
-            const numButtons = Array.from({ length: maxNumbers - minNumbers + 1 }, (_, i) => minNumbers + i).map((numCount) => {
-                const bets = formulas[numCount]?.length || 0;
-                return `
-                    <button
-                        onclick="(${handleSelectCount})(${numCount})"
-                        class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-lg group transform hover:scale-[1.05]"
-                    >
-                        <div class="text-center">
-                            <div class="text-4xl font-extrabold mb-2 text-blue-400">${numCount}</div>
-                            <div class="text-sm text-gray-400 uppercase tracking-wider">Base Numbers</div>
-                            <div class="mt-3 pt-3 border-t border-blue-500/30">
-                                <div class="text-xl font-semibold text-white">${bets}</div>
-                                <div class="text-xs text-gray-400">Total Bets</div>
-                            </div>
-                        </div>
-                    </button>
-                `;
-            }).join('');
+        
+        function renderBaseNumberCountScreen() {
+            const lotto = state.selectedLottery;
+            const isPick5 = lotto.type === 'pick5';
+            const availableCounts = Object.keys(isPick5 ? FORMULAS_PICK5 : FORMULAS_PICK6).map(Number).sort((a,b) => a-b);
+            const backAction = `updateState({ screen: 'country', selectedLottery: null })`;
 
             const html = `
-                <div class="screen active" id="sim-base-count-selection-screen">
-                    <button onclick="updateState({ screen: 'simLotterySelection', simBaseCount: 0 })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Lottery Selection
-                    </button>
+                <div class="screen active" id="base-count-screen">
+                    <button onclick="${backAction}" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Lotteries</button>
                     
-                    <div class="text-center mb-10">
-                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulator</h2>
-                        <p class="text-gray-400 text-lg">Select the amount of **Base Numbers** you want to simulate playing with.</p>
+                    <h1 class="text-3xl font-extrabold text-yellow-300 mb-3">${lotto.name} (${lotto.type.toUpperCase()})</h1>
+                    <p class="text-gray-400 mb-8">Base Range: 1-${lotto.range}. ${lotto.extra ? `Extra Ball Range: 1-${lotto.extra.range}.` : ''}</p>
+                    
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">1. Select Number of Base Bets (T)</h2>
+                    <p class="text-gray-500 mb-6">Choose how many numbers (T) you want to use for the pyramidal reduction (T numbers will generate ${isPick5 ? 'Pick 5' : 'Pick 6'} combinations).</p>
+
+                    <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-4">
+                        ${availableCounts.map(count => `
+                            <button
+                                onclick="updateState({ baseNumberCount: ${count}, baseNumbers: [], screen: 'numberSelection' })"
+                                class="bg-gray-700/50 hover:bg-yellow-500 hover:text-gray-900 transition-colors duration-200 p-4 rounded-lg font-bold text-xl shadow-md transform hover:scale-105"
+                            >
+                                T=${count}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+        
+        function renderNumberSelectionScreen() {
+            const lotto = state.selectedLottery;
+            const count = state.baseNumberCount;
+            const selectedNumbers = state.baseNumbers;
+            const maxRange = lotto.range;
+            const backAction = `updateState({ screen: 'baseNumberCount', baseNumberCount: 0 })`;
+            const formula = lotto.type === 'pick5' ? FORMULAS_PICK5[count] : FORMULAS_PICK6[count];
+            const combinationsCount = formula ? formula.length : 0;
+
+            const isComplete = selectedNumbers.length === count;
+
+            const html = `
+                <div class="screen active" id="number-selection-screen">
+                    <button onclick="${backAction}" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Base Count</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-yellow-300 mb-3">${lotto.name} - T=${count}</h1>
+                    <p class="text-gray-400 mb-4">Select exactly ${count} Base Numbers from 1 to ${maxRange}.</p>
+                    
+                    <div class="p-4 bg-gray-800 rounded-lg shadow-inner mb-6">
+                        <h2 class="text-xl font-semibold text-yellow-400 mb-2">Selected Numbers (${selectedNumbers.length}/${count}):</h2>
+                        <div class="flex flex-wrap items-center">
+                            ${selectedNumbers.length > 0 ? selectedNumbers.map(num => `
+                                <div class="selected-number-display cursor-pointer" onclick="removeBaseNumber(${num})" title="Click to remove">${num}</div>
+                            `).join('') : '<p class="text-gray-500">No numbers selected yet.</p>'}
+                        </div>
+                        ${isComplete ? `<p class="mt-4 text-green-400 icon-check font-bold">Selection complete! ${combinationsCount} combinations generated.</p>` : ''}
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        ${numButtons}
+                    <div class="flex justify-between items-center mb-6">
+                        <button onclick="generateMainBets()" ${isComplete ? '' : 'disabled'} class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-full transition-colors duration-200 shadow-md disabled:opacity-50 icon-magic">
+                            Generate Combinations (${combinationsCount})
+                        </button>
+                        <button onclick="updateState({ baseNumbers: getRandomUniqueNumbers(${count}, ${maxRange}) })" class="bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-200 shadow-md icon-dice">
+                            Auto-Select
+                        </button>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">Number Grid (1 to ${maxRange})</h2>
+                    <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 gap-2">
+                        ${Array.from({ length: maxRange }, (_, i) => i + 1).map(num => `
+                            <button
+                                onclick="addBaseNumber(${num})"
+                                class="grid-number-button ${selectedNumbers.includes(num) ? 'selected' : ''}"
+                                ${!selectedNumbers.includes(num) && selectedNumbers.length >= count ? 'disabled' : ''}
+                            >
+                                ${num}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+        
+        function renderExtraNumbersSelectionScreen() {
+            const lotto = state.selectedLottery;
+            const extra = lotto.extra;
+            const count = extra.count;
+            const selectedNumbers = state.extraNumbers;
+            const maxRange = extra.range;
+            const backAction = `updateState({ screen: 'numberSelection', finalCombinations: null })`;
+            const isComplete = selectedNumbers.length === count;
+
+            const html = `
+                <div class="screen active" id="extra-number-selection-screen">
+                    <button onclick="${backAction}" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Main Selection</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-yellow-300 mb-3">${lotto.name} - ${extra.name} Selection</h1>
+                    <p class="text-gray-400 mb-4">Select exactly ${count} ${extra.name} from 1 to ${maxRange}.</p>
+
+                    <div class="p-4 bg-gray-800 rounded-lg shadow-inner mb-6">
+                        <h2 class="text-xl font-semibold text-yellow-400 mb-2">Selected ${extra.name} (${selectedNumbers.length}/${count}):</h2>
+                        <div class="flex flex-wrap items-center">
+                            ${selectedNumbers.length > 0 ? selectedNumbers.map(num => `
+                                <div class="extra-ball-display cursor-pointer bg-red-600" onclick="removeExtraNumber(${num})" title="Click to remove">${num}</div>
+                            `).join('') : '<p class="text-gray-500">No extra numbers selected yet.</p>'}
+                        </div>
+                        ${isComplete ? `<p class="mt-4 text-green-400 icon-check font-bold">Extra selection complete!</p>` : ''}
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6">
+                        <button onclick="calculateAndGoToResults()" ${isComplete ? '' : 'disabled'} class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-full transition-colors duration-200 shadow-md disabled:opacity-50 icon-magic">
+                            Generate Final Bets
+                        </button>
+                        <button onclick="autoSelectExtraNumbers()" class="bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-200 shadow-md icon-dice">
+                            Auto-Select Extra
+                        </button>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">${extra.name} Grid (1 to ${maxRange})</h2>
+                    <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 gap-2">
+                        ${Array.from({ length: maxRange }, (_, i) => i + 1).map(num => `
+                            <button
+                                onclick="addExtraNumber(${num})"
+                                class="grid-extra-number-button ${selectedNumbers.includes(num) ? 'selected' : ''}"
+                                ${!selectedNumbers.includes(num) && selectedNumbers.length >= count ? 'disabled' : ''}
+                            >
+                                ${num}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+        
+        function renderResultsScreen() {
+            const lotto = state.selectedLottery;
+            const combinations = state.finalCombinations;
+            const extraNumbers = state.extraNumbers;
+            const hasExtra = extraNumbers.length > 0;
+            const backAction = hasExtra ? `updateState({ screen: 'extraNumberSelection', finalCombinations: null })` : `updateState({ screen: 'numberSelection', finalCombinations: null })`;
+
+            const html = `
+                <div class="screen active" id="results-screen">
+                    <button onclick="${backAction}" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Number Selection</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-green-400 mb-3 icon-check">Combinations Generated Successfully!</h1>
+                    <p class="text-gray-400 mb-4">Lottery: ${lotto.name} | Base Numbers (T=${state.baseNumberCount}): ${state.baseNumbers.join(', ')}</p>
+
+                    ${hasExtra ? `
+                        <div class="p-4 bg-red-800/50 rounded-lg shadow-inner mb-6 flex items-center">
+                            <h2 class="text-xl font-semibold text-red-300 mr-4">${lotto.extra.name}:</h2>
+                            ${extraNumbers.map(num => `<div class="extra-ball-display bg-red-600">${num}</div>`).join('')}
+                        </div>
+                    ` : ''}
+
+                    <div class="p-4 bg-gray-800 rounded-lg shadow-inner mb-6">
+                        <h2 class="text-xl font-semibold text-yellow-400 mb-2">Total Bets: ${combinations.length}</h2>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-300">Pyramidal reduction complete.</p>
+                            <button onclick="exportToTxt()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-200 shadow-md icon-export">
+                                Export to TXT
+                            </button>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">Generated Bets:</h2>
+                    <div class="space-y-3 max-h-96 overflow-y-auto p-3 bg-gray-900 rounded-lg border border-gray-700">
+                        ${combinations.map((bet, index) => {
+                            const mainNumbers = bet.map(n => `<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-yellow-500 text-gray-900 font-bold text-sm">${n}</span>`).join('');
+                            const extraPart = hasExtra ? extraNumbers.map(n => `<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-600 text-white font-bold text-sm ml-2">${n}</span>`).join('') : '';
+                            return `
+                                <div class="flex items-center p-2 bg-gray-800 rounded-md">
+                                    <span class="text-sm font-mono mr-4 text-gray-500">${index + 1}.</span>
+                                    ${mainNumbers}
+                                    ${extraPart}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button onclick="resetApp()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200 shadow-xl icon-dice">
+                            Start New Generation
+                        </button>
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+
+        // --- SIMULATOR SCREENS ---
+        
+        function renderSimLotterySelectionScreen() {
+            // Reutiliza la lógica de renderCountryScreen para la selección inicial del simulador
+            
+            const html = `
+                <div class="screen active" id="sim-lottery-selection-screen">
+                    <button onclick="backToContinentScreen()" class="mb-6 inline-flex items-center text-yellow-500 hover:text-yellow-400 icon-left font-semibold">Back to Home</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-blue-400 mb-8 icon-sim">Simulator: Select Lottery</h1>
+                    
+                    <p class="text-gray-400 mb-6">Select the lottery model to define the rules for the simulation.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${Object.keys(LOTTERIES).map(continentKey => {
+                            const countries = LOTTERIES[continentKey];
+                            return Object.keys(countries).map(countryKey => {
+                                const countryData = countries[countryKey];
+                                return countryData.lotteries.map(lotto => `
+                                    <button
+                                        onclick="updateState({ 
+                                            screen: 'simBaseCount', 
+                                            simLottery: LOTTERIES['${continentKey}']['${countryKey}'].lotteries.find(l => l.name === '${lotto.name}')
+                                        })"
+                                        class="w-full bg-gray-700/50 hover:bg-blue-600/50 text-gray-200 hover:text-white transition-colors duration-200 p-3 rounded-lg flex justify-between items-center border border-gray-700 hover:border-blue-500 shadow-md"
+                                    >
+                                        <div class="flex items-center space-x-2">
+                                            <span class="flag-icon text-lg">${countryData.flag}</span>
+                                            <span>${lotto.name}</span>
+                                        </div>
+                                        <span class="text-sm text-gray-400">${lotto.type.toUpperCase()} (1-${lotto.range}${lotto.extra ? ` + ${lotto.extra.count}x1-${lotto.extra.range}` : ''})</span>
+                                    </button>
+                                `).join('');
+                            }).join('');
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+        
+        function renderSimBaseCountScreen() {
+            const lotto = state.simLottery;
+            const isPick5 = lotto.type === 'pick5';
+            const availableCounts = Object.keys(isPick5 ? FORMULAS_PICK5 : FORMULAS_PICK6).map(Number).sort((a,b) => a-b);
+            const backAction = `goToSimSelection()`;
+
+            const html = `
+                <div class="screen active" id="sim-base-count-screen">
+                    <button onclick="${backAction}" class="mb-6 inline-flex items-center text-blue-500 hover:text-blue-400 icon-left font-semibold">Back to Lottery Selection</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-blue-400 mb-3 icon-calc">Simulator: ${lotto.name}</h1>
+                    <p class="text-gray-400 mb-8">Base Range: 1-${lotto.range}. ${lotto.extra ? `Extra Ball Range: 1-${lotto.extra.range}.` : ''}</p>
+                    
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">1. Select Number of Base Bets (T)</h2>
+                    <p class="text-gray-500 mb-6">Choose the size of the initial pool (T numbers) that your bets will be derived from.</p>
+
+                    <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-4">
+                        ${availableCounts.map(count => `
+                            <button
+                                onclick="updateState({ simBaseCount: ${count}, simBaseNumbers: [], simWinningNumbers: [], simWinningExtraNumbers: [], simResults: null, screen: 'simNumberInput' })"
+                                class="bg-gray-700/50 hover:bg-blue-500 hover:text-gray-900 transition-colors duration-200 p-4 rounded-lg font-bold text-xl shadow-md transform hover:scale-105"
+                            >
+                                T=${count}
+                            </button>
+                        `).join('')}
                     </div>
                 </div>
             `;
@@ -777,129 +964,98 @@
         function renderSimNumberInputScreen() {
             const lotto = state.simLottery;
             const baseCount = state.simBaseCount;
+            const maxRange = lotto.range;
             const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
-            const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
-            const mainRange = lotto.range;
-            const extraRange = lotto.extra ? lotto.extra.range : 0;
+            const hasExtra = lotto.extra;
             
-            // Números disponibles para las cuadrículas
-            const availableBaseNumbers = Array.from({ length: mainRange }, (_, i) => i + 1); // Rango completo
-            const availableWinningNumbers = state.simBaseNumbers; // <--- CLAVE: Solo los números base seleccionados
+            const baseNumbers = state.simBaseNumbers;
+            const winningNumbers = state.simWinningNumbers;
+            const winningExtraNumbers = state.simWinningExtraNumbers;
 
-            const selectedBaseCount = state.simBaseNumbers.length;
-            const selectedWinningCount = state.simWinningNumbers.length;
-            const selectedExtraCount = state.simWinningExtraNumbers.length;
+            const isBaseComplete = baseNumbers.length === baseCount;
+            const isWinningComplete = winningNumbers.length === requiredMainCount;
+            const isExtraComplete = !hasExtra || winningExtraNumbers.length === lotto.extra.count;
+            const isReadyToSimulate = isBaseComplete && isWinningComplete && isExtraComplete;
+
+            const combinationsCount = FORMULAS_PICK5[baseCount] ? FORMULAS_PICK5[baseCount].length : (FORMULAS_PICK6[baseCount] ? FORMULAS_PICK6[baseCount].length : 0);
             
-            // --- Creador de Cuadrícula (Reutilizado) ---
-            const createNumberGrid = (availableNumbers, currentNumbers, requiredCount, handler, customClass = '') => {
-                // Determina la cantidad de columnas basándose en el rango más grande posible (10 es un buen max)
-                const rangeMax = availableNumbers.length > 0 ? Math.max(...availableNumbers) : 1;
-                const gridColumns = Math.min(10, Math.ceil(rangeMax / 10) > 0 ? Math.ceil(rangeMax / 10) : 10);
-                
-                // Si la lista de números disponibles está vacía, mostrar un mensaje
-                if (availableNumbers.length === 0 && handler.params === 'winning') {
-                    return `
-                        <p class="text-center text-red-400 font-semibold p-4">
-                            First, select your Base Numbers in the section above.
-                        </p>
-                    `;
-                }
+            const html = `
+                <div class="screen active" id="sim-number-input-screen">
+                    <button onclick="updateState({ screen: 'simBaseCount' })" class="mb-6 inline-flex items-center text-blue-500 hover:text-blue-400 icon-left font-semibold">Back to Base Count</button>
+                    
+                    <h1 class="text-3xl font-extrabold text-blue-400 mb-3 icon-calc">Simulator: ${lotto.name} (T=${baseCount})</h1>
+                    <p class="text-gray-400 mb-6">Generated bets: ${combinationsCount}.</p>
+                    
+                    <div class="mb-8 p-4 bg-gray-800 rounded-lg shadow-inner border-l-4 ${isBaseComplete ? 'border-green-500' : 'border-blue-500'}">
+                        <h2 class="text-xl font-semibold text-blue-300 mb-2">1. Select ${baseCount} Base Numbers (T)</h2>
+                        <div class="flex flex-wrap items-center mb-4">
+                            ${baseNumbers.length > 0 ? baseNumbers.map(num => `
+                                <div class="sim-number-button selected bg-blue-500 cursor-pointer" onclick="handleSimNumberSelection(${num}, 'base')" title="Click to remove">${num}</div>
+                            `).join('') : '<p class="text-gray-500">Select the T numbers pool.</p>'}
+                        </div>
+                        <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 max-h-48 overflow-y-auto p-2">
+                            ${Array.from({ length: maxRange }, (_, i) => i + 1).map(num => `
+                                <button
+                                    onclick="handleSimNumberSelection(${num}, 'base')"
+                                    class="grid-number-button ${baseNumbers.includes(num) ? 'selected' : ''}"
+                                    ${!baseNumbers.includes(num) && baseNumbers.length >= baseCount ? 'disabled' : ''}
+                                >
+                                    ${num}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
 
-                if (availableNumbers.length === 0 && handler.params === 'base') {
-                     // Esto no debería suceder si el rango es > 0, pero por si acaso.
-                    return `<p class="text-center text-red-400 font-semibold p-4">No available numbers in this range (1 to ${mainRange}).</p>`;
-                }
-                
-                return `
-                    <div class="flex justify-center p-4">
-                        <div style="display: grid; grid-template-columns: repeat(${gridColumns}, 1fr); gap: 8px;">
-                            ${availableNumbers.map(num => {
-                                // Determinar la función de llamada
-                                let handlerCall;
-                                if (handler.name === 'handleSimExtraNumberSelection') {
-                                    handlerCall = `handleSimExtraNumberSelection(${num})`;
-                                } else {
-                                    // Para handleSimNumberSelection, el segundo parámetro es el tipo ('base' o 'winning')
-                                    handlerCall = `handleSimNumberSelection(${num}, '${handler.params}')`;
-                                }
-                                
-                                return `
-                                    <button 
-                                        onclick="${handlerCall}" 
-                                        class="${customClass} ${currentNumbers.includes(num) ? 'selected' : ''}"
-                                        ${currentNumbers.length >= requiredCount && !currentNumbers.includes(num) ? 'disabled' : ''}
+                    <div class="mb-8 p-4 bg-gray-800 rounded-lg shadow-inner border-l-4 ${isWinningComplete ? 'border-green-500' : 'border-yellow-500'}">
+                        <h2 class="text-xl font-semibold text-yellow-300 mb-2">2. Select ${requiredMainCount} Winning Numbers</h2>
+                        <p class="text-gray-500 mb-4">These must be selected from the T numbers above.</p>
+                        <div class="flex flex-wrap items-center mb-4">
+                            ${winningNumbers.length > 0 ? winningNumbers.map(num => `
+                                <div class="sim-number-button selected bg-emerald-500 cursor-pointer" onclick="handleSimNumberSelection(${num}, 'winning')" title="Click to remove">${num}</div>
+                            `).join('') : '<p class="text-gray-500">Select the actual winning numbers.</p>'}
+                        </div>
+                        <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 max-h-48 overflow-y-auto p-2">
+                            ${baseNumbers.map(num => `
+                                <button
+                                    onclick="handleSimNumberSelection(${num}, 'winning')"
+                                    class="sim-number-button ${winningNumbers.includes(num) ? 'selected' : ''}"
+                                    ${!winningNumbers.includes(num) && winningNumbers.length >= requiredMainCount ? 'disabled' : ''}
+                                >
+                                    ${num}
+                                </button>
+                            `).join('')}
+                            ${baseNumbers.length === 0 ? '<p class="text-gray-500">Select Base Numbers first.</p>' : ''}
+                        </div>
+                    </div>
+
+                    ${hasExtra ? `
+                        <div class="mb-8 p-4 bg-gray-800 rounded-lg shadow-inner border-l-4 ${isExtraComplete ? 'border-green-500' : 'border-red-500'}">
+                            <h2 class="text-xl font-semibold text-red-300 mb-2">3. Select ${lotto.extra.count} Winning ${lotto.extra.name} (1-${lotto.extra.range})</h2>
+                            <div class="flex flex-wrap items-center mb-4">
+                                ${winningExtraNumbers.length > 0 ? winningExtraNumbers.map(num => `
+                                    <div class="extra-ball-display bg-red-600 cursor-pointer" onclick="handleSimExtraNumberSelection(${num})" title="Click to remove">${num}</div>
+                                `).join('') : '<p class="text-gray-500">Select the winning extra number(s).</p>'}
+                            </div>
+                            <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 max-h-48 overflow-y-auto p-2">
+                                ${Array.from({ length: lotto.extra.range }, (_, i) => i + 1).map(num => `
+                                    <button
+                                        onclick="handleSimExtraNumberSelection(${num})"
+                                        class="grid-extra-number-button ${winningExtraNumbers.includes(num) ? 'selected' : ''}"
+                                        ${!winningExtraNumbers.includes(num) && winningExtraNumbers.length >= lotto.extra.count ? 'disabled' : ''}
                                     >
                                         ${num}
                                     </button>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            };
-
-            // Grid 1: Números Base (Rango completo)
-            const baseGrid = createNumberGrid(availableBaseNumbers, state.simBaseNumbers, baseCount, {name: 'handleSimNumberSelection', params: 'base'}, "grid-number-button");
-            
-            // Grid 2: Números Ganadores (Solo los números base seleccionados)
-            const winningGrid = createNumberGrid(availableWinningNumbers, state.simWinningNumbers, requiredMainCount, {name: 'handleSimNumberSelection', params: 'winning'}, "sim-number-button");
-            
-            let extraGrid = '';
-            if (requiredExtraCount > 0) {
-                // Grid 3: Bolas Extra (Rango completo de Bolas Extra)
-                const availableExtraNumbers = Array.from({ length: extraRange }, (_, i) => i + 1); 
-                extraGrid = createNumberGrid(availableExtraNumbers, state.simWinningExtraNumbers, requiredExtraCount, {name: 'handleSimExtraNumberSelection'}, "grid-extra-number-button");
-            }
-            
-            // Mensaje de estado de Winning Numbers
-            let winningMessage = `<p class="text-gray-400 mb-4">Select the **${requiredMainCount} Winning Numbers** **from your Base Numbers**.</p>`;
-            if (availableWinningNumbers.length === 0) {
-                 winningMessage = `<p class="text-lg font-semibold text-red-400 mb-4">You must first select your ${baseCount} Base Numbers in the section above.</p>`;
-            }
-
-
-            const html = `
-                <div class="screen active" id="sim-number-input-screen">
-                    <button onclick="updateState({ screen: 'simBaseCountSelection', simBaseNumbers: [] })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Base Count
-                    </button>
-                    
-                    <div class="text-center mb-8">
-                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulation</h2>
-                        <p class="text-gray-400 text-lg">Define the numbers for your test.</p>
-                    </div>
-
-                    <div class="space-y-8">
-                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-xl">
-                            <h3 class="text-2xl font-bold text-yellow-400 mb-4">Your Base Numbers (${selectedBaseCount}/${baseCount})</h3>
-                            <p class="text-gray-400 mb-4">Select the **${baseCount} Base Numbers** you would have played with (from 1 to ${mainRange}).</p>
-                            ${baseGrid}
-                        </div>
-                        
-                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-green-500/30 shadow-xl">
-                            <h3 class="text-2xl font-bold text-green-400 mb-4">Actual Winning Numbers (${selectedWinningCount}/${requiredMainCount})</h3>
-                            ${winningMessage}
-                            ${winningGrid}
-                        </div>
-
-                        ${requiredExtraCount > 0 ? `
-                            <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-xl">
-                                <h3 class="text-2xl font-bold text-red-400 mb-4">Winning ${lotto.extra.name} (${selectedExtraCount}/${requiredExtraCount})</h3>
-                                <p class="text-gray-400 mb-4">Select the **${requiredExtraCount} Winning ${lotto.extra.name}** (from 1 to ${extraRange}).</p>
-                                ${extraGrid}
+                                `).join('')}
                             </div>
-                        ` : ''}
-                    </div>
+                        </div>
+                    ` : ''}
 
-                    <div class="text-center mt-8">
-                        <button 
-                            onclick="goToSimResults()"
-                            class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-lg shadow-green-600/50 disabled:bg-gray-600 disabled:shadow-none icon-calc"
-                            ${selectedBaseCount !== baseCount || selectedWinningCount !== requiredMainCount || (requiredExtraCount > 0 && selectedExtraCount !== requiredExtraCount) ? 'disabled' : ''}
-                        >
+                    <div class="mt-8 text-center">
+                        <button onclick="goToSimResults()" ${isReadyToSimulate ? '' : 'disabled'} class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-full transition-colors duration-200 shadow-xl disabled:opacity-50 icon-sim">
                             Run Simulation
                         </button>
                     </div>
+
                 </div>
             `;
             appContainer.innerHTML = html;
@@ -908,297 +1064,62 @@
         function renderSimResultsScreen() {
             const lotto = state.simLottery;
             const results = state.simResults;
+            const hasExtra = lotto.extra;
             const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
-            const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
+            const requiredExtraCount = hasExtra ? lotto.extra.count : 0;
+            const winningMainNumbers = state.simWinningNumbers.join(', ');
+            const winningExtraNumbers = hasExtra ? state.simWinningExtraNumbers.join(', ') : 'N/A';
             
-            // Función auxiliar para ordenar los resultados y dar formato
-            const formatResults = (hits) => {
-                return Object.keys(hits)
-                    .sort((a, b) => parseInt(b) - parseInt(a)) // Ordenar de mayor a menor acierto
-                    .filter(key => hits[key] > 0)
-                    .map(key => `
-                        <div class="flex justify-between items-center py-2 border-b border-gray-700 last:border-b-0">
-                            <span class="text-xl font-bold ${key >= requiredMainCount-1 ? 'text-green-400' : 'text-yellow-400'}">${key} Correct</span>
-                            <span class="text-2xl font-extrabold text-white">${hits[key]} Bets</span>
-                        </div>
-                    `).join('');
-            };
-
-            // Función para formatear los resultados totales (principal + extra)
-            const formatTotalMatches = (matches) => {
-                return Object.keys(matches)
-                    .sort((a, b) => {
-                        const [mainA, extraA] = a.split('+').map(Number);
-                        const [mainB, extraB] = b.split('+').map(Number);
-                        // Ordenar primero por aciertos principales (desc) y luego por aciertos extra (desc)
-                        if (mainA !== mainB) return mainB - mainA;
-                        return extraB - extraA;
-                    })
-                    .filter(key => matches[key] > 0)
-                    .map(key => {
-                        const [main, extra] = key.split('+').map(Number);
-                        const isTopPrize = main === requiredMainCount && extra === requiredExtraCount;
-                        const isSignificant = main >= requiredMainCount - 1; // 5/6 o 4/5
-                        
-                        return `
-                            <div class="flex justify-between items-center py-3 border-b border-gray-700 last:border-b-0 ${isTopPrize ? 'bg-yellow-900/40 rounded-lg px-2 my-1' : ''}">
-                                <span class="text-xl font-bold ${isTopPrize ? 'text-red-400' : (isSignificant ? 'text-green-400' : 'text-gray-300')}">
-                                    ${main} main ${requiredExtraCount > 0 ? `+ ${extra} ${lotto.extra.name}` : ''}
-                                </span>
-                                <span class="text-2xl font-extrabold ${isTopPrize ? 'text-red-300' : 'text-white'}">${matches[key]} Bets</span>
-                            </div>
-                        `;
-                    }).join('');
-            };
-
-
+            const sortedTotalMatchesKeys = Object.keys(results.totalMatches).sort((a, b) => {
+                const [aMain, aExtra] = a.split('+').map(Number);
+                const [bMain, bExtra] = b.split('+').map(Number);
+                if (bMain !== aMain) return bMain - aMain; // Sort descending by main hits
+                return bExtra - aExtra; // Then descending by extra hits
+            });
+            
             const html = `
                 <div class="screen active" id="sim-results-screen">
-                    <button onclick="updateState({ screen: 'simNumberInput', simResults: null })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Change Input Numbers
-                    </button>
-
-                    <div class="text-center mb-8">
-                        <h2 class="text-4xl font-bold text-green-400 mb-2 icon-money">Simulation Results for ${lotto.name}</h2>
-                        <p class="text-gray-400 text-lg">Performance of ${results.totalBets} bets generated from your ${state.simBaseCount} Base Numbers.</p>
-                        
-                        <div class="mt-4 p-3 bg-gray-800 rounded-xl inline-block text-left border border-gray-700">
-                             <p class="text-sm text-yellow-300 font-semibold">Your Base Numbers: ${state.simBaseNumbers.join(', ')}</p>
-                             <p class="text-sm text-green-300 font-semibold">Winning Numbers: ${state.simWinningNumbers.join(', ')}</p>
-                             ${requiredExtraCount > 0 ? `<p class="text-sm text-red-300 font-semibold">Winning ${lotto.extra.name}: ${state.simWinningExtraNumbers.join(', ')}</p>` : ''}
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        
-                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-2xl">
-                            <h3 class="text-2xl font-bold text-yellow-400 mb-4 border-b pb-2 border-yellow-500/50">Main Number Hits (1-${requiredMainCount})</h3>
-                            ${formatResults(results.mainHits)}
-                        </div>
-                        
-                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-2xl">
-                            <h3 class="text-2xl font-bold text-red-400 mb-4 border-b pb-2 border-red-500/50">Total Match Performance</h3>
-                            ${formatTotalMatches(results.totalMatches)}
-                        </div>
-                    </div>
+                    <button onclick="updateState({ screen: 'simNumberInput' })" class="mb-6 inline-flex items-center text-blue-500 hover:text-blue-400 icon-left font-semibold">Back to Input</button>
                     
-                    <div class="mt-10 p-4 rounded-xl bg-blue-900/50 border border-blue-700 shadow-xl text-center">
-                        <p class="text-blue-300 text-lg font-bold">Simulación de Inversión vs. Cobertura</p>
-                        <p class="text-blue-200 text-sm">
-                            The algorithm reduced a potential full wheel of hundreds/thousands of combinations to just **${results.totalBets} bets**, achieving the high level of hits shown above.
-                        </p>
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
+                    <h1 class="text-3xl font-extrabold text-green-400 mb-3 icon-check">Simulation Complete!</h1>
+                    <p class="text-gray-400 mb-6">Lottery: ${lotto.name} | Base Numbers (T=${state.simBaseCount})</p>
 
-
-        // --- OTRAS PANTALLAS (No se muestran completas por brevedad, pero están en el script) ---
-        function renderCountryScreen() {
-            const countriesData = LOTTERIES[state.selectedContinent];
-            const html = `
-                <div class="screen active" id="country-screen">
-                    <button onclick="resetApp()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Continents
-                    </button>
-                    
-                    <div class="text-center mb-10">
-                        <div class="flex items-center justify-center gap-4 mb-2">
-                            <span class="flag-icon">${countriesData[Object.keys(countriesData)[0]].flag}</span>
-                            <h2 class="text-4xl font-bold text-white mb-2 tracking-wide">${state.selectedContinent}</h2>
-                        </div>
-                        <p class="text-gray-400 text-lg">Select the Country</p>
+                    <div class="p-4 bg-yellow-900/40 rounded-lg shadow-inner mb-6">
+                        <h2 class="text-xl font-semibold text-yellow-400 mb-2">Simulation Summary</h2>
+                        <p class="text-gray-300">Total Bets Generated (Pyramidal Reduction): <strong>${results.totalBets}</strong></p>
+                        <p class="text-gray-300">Winning Main Numbers (${requiredMainCount}): <strong>${winningMainNumbers}</strong></p>
+                        ${hasExtra ? `<p class="text-gray-300">Winning ${lotto.extra.name} (${requiredExtraCount}): <strong>${winningExtraNumbers}</strong></p>` : ''}
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${Object.keys(countriesData).map(countryKey => {
-                            const country = countriesData[countryKey];
-                            return `
-                                <button
-                                    onclick="updateState({ screen: 'lottery', selectedCountry: '${countryKey}' })"
-                                    class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
-                                >
-                                    <div class="flex items-center gap-4">
-                                        <span class="flag-icon">${country.flag}</span>
-                                        <div>
-                                            <span>${countryKey}</span>
-                                            <span class="text-sm text-gray-400 block font-normal">${country.nativeName}</span>
-                                        </div>
-                                    </div>
-                                    <span class="icon-right text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
-                                </button>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
-
-        function renderLotteryScreen() {
-            const countryData = LOTTERIES[state.selectedContinent][state.selectedCountry];
-            const lotteries = countryData.lotteries;
-            const html = `
-                <div class="screen active" id="lottery-screen">
-                    <button onclick="updateState({ screen: 'country', selectedLottery: null })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Countries
-                    </button>
-                    
-                    <div class="text-center mb-10">
-                        <div class="flex items-center justify-center gap-4 mb-2">
-                            <span class="flag-icon">${countryData.flag}</span>
-                            <h2 class="text-4xl font-bold text-yellow-400 tracking-wide">${state.selectedCountry}</h2>
-                        </div>
-                        <p class="text-gray-400 text-lg">Select the Lottery</p>
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-300">Detailed Hit Analysis (Bet Count)</h2>
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-bold text-gray-200 uppercase tracking-wider">Main Hits</th>
+                                    ${hasExtra ? `<th class="px-4 py-3 text-left text-sm font-bold text-gray-200 uppercase tracking-wider">${lotto.extra.name} Hits</th>` : ''}
+                                    <th class="px-4 py-3 text-right text-sm font-bold text-gray-200 uppercase tracking-wider">Bets Matched</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                ${sortedTotalMatchesKeys.map(key => {
+                                    const [main, extra] = key.split('+');
+                                    const count = results.totalMatches[key];
+                                    return `
+                                        <tr class="bg-gray-900 hover:bg-gray-800 transition-colors">
+                                            <td class="px-4 py-3 whitespace-nowrap text-lg font-bold ${Number(main) === requiredMainCount ? 'text-green-400' : 'text-yellow-400'}">${main}/${requiredMainCount}</td>
+                                            ${hasExtra ? `<td class="px-4 py-3 whitespace-nowrap text-lg font-bold ${Number(extra) === requiredExtraCount ? 'text-green-400' : 'text-red-400'}">${extra}/${requiredExtraCount}</td>` : ''}
+                                            <td class="px-4 py-3 whitespace-nowrap text-right text-lg font-bold text-white">${count}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4">
-                        ${lotteries.map((lottery, index) => {
-                            const lotteryString = JSON.stringify(lottery).replace(/"/g, '&quot;');
-                            return `
-                                <button
-                                    onclick="updateState({ screen: 'combinations', selectedLottery: ${lotteryString} })"
-                                    class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-6 rounded-2xl border-2 border-yellow-500/30 hover:border-yellow-500 shadow-xl group transform hover:scale-[1.01]"
-                                >
-                                    <div class="flex items-center justify-between">
-                                        <div class="text-left">
-                                            <h3 class="text-3xl font-bold mb-1 text-white">${lottery.name}</h3>
-                                            <p class="text-gray-400 text-base">
-                                                ${lottery.type === 'pick5' ? 'Pick 5' : 'Pick 6'} • Range: 1-${lottery.range}
-                                                ${lottery.extra ? ` + ${lottery.extra.name} (${lottery.extra.count} of 1-${lottery.extra.range})` : ''}
-                                            </p>
-                                        </div>
-                                        <span class="icon-right w-7 h-7 text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
-                                    </div>
-                                </button>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
-
-        function renderCombinationsScreen() {
-            const handleSelectCount = (count) => {
-                updateState({ 
-                    screen: 'numberSelection', 
-                    baseNumberCount: count,
-                    baseNumbers: [], 
-                    extraNumbers: [],
-                    finalCombinations: null
-                });
-            };
-
-            const formulas = state.selectedLottery.type === 'pick5' ? FORMULAS_PICK5 : FORMULAS_PICK6;
-            const minNumbers = state.selectedLottery.type === 'pick5' ? 8 : 9;
-            const maxNumbers = state.selectedLottery.type === 'pick5' ? 15 : 16;
-            
-            const numButtons = Array.from({ length: maxNumbers - minNumbers + 1 }, (_, i) => minNumbers + i).map((numCount) => {
-                const bets = formulas[numCount]?.length || 0;
-                return `
-                    <button
-                        onclick="(${handleSelectCount})(${numCount})"
-                        class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-yellow-500/30 hover:border-yellow-500 shadow-lg group transform hover:scale-[1.05]"
-                    >
-                        <div class="text-center">
-                            <div class="text-4xl font-extrabold mb-2 text-yellow-400">${numCount}</div>
-                            <div class="text-sm text-gray-400 uppercase tracking-wider">Base Numbers</div>
-                            <div class="mt-3 pt-3 border-t border-yellow-500/30">
-                                <div class="text-xl font-semibold text-white">${bets}</div>
-                                <div class="text-xs text-gray-400">Bets (Combinations)</div>
-                            </div>
-                        </div>
-                    </button>
-                `;
-            }).join('');
-
-            const html = `
-                <div class="screen active" id="combinations-screen">
-                    <button onclick="updateState({ screen: 'lottery' })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Lotteries
-                    </button>
-                    
-                    <div class="text-center mb-10">
-                        <span class="icon-dice text-yellow-400 w-12 h-12 mx-auto mb-4 inline-block text-3xl"></span>
-                        <h2 class="text-4xl font-bold text-yellow-400 mb-2">${state.selectedLottery.name}</h2>
-                        <p class="text-gray-400 text-lg">Select how many **Base Numbers** you want to play</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        ${numButtons}
-                    </div>
-
-                    <div class="mt-10 bg-gray-800/70 rounded-2xl p-6 border-2 border-yellow-500 shadow-2xl">
-                        <div class="flex items-start gap-4">
-                            <span class="icon-calc text-yellow-400 w-8 h-8 flex-shrink-0 mt-1 text-2xl"></span>
-                            <div class="text-gray-200">
-                                <p class="font-extrabold mb-2 text-2xl text-yellow-300">Pyramidal Algorithm Pro™</p>
-                                <p class="text-base text-gray-300">
-                                    This system reduces the complexity of thousands of possible combinations to an optimal set of bets.
-                                    Select your most probable **Base Numbers** and the algorithm maximizes your hit coverage with reduced investment.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
-
-        function renderNumberSelectionScreen() {
-            const lotto = state.selectedLottery;
-            const count = state.baseNumberCount;
-            const selectedNumbers = state.baseNumbers;
-            const range = lotto.range;
-            const remaining = count - selectedNumbers.length;
-
-            const gridColumns = Math.min(10, Math.ceil(range / 10)); 
-
-            const numberGrid = Array.from({ length: range }, (_, i) => i + 1).map(num => `
-                <button 
-                    onclick="addBaseNumber(${num})" 
-                    class="grid-number-button ${selectedNumbers.includes(num) ? 'selected' : ''}"
-                    ${selectedNumbers.length >= count && !selectedNumbers.includes(num) ? 'disabled' : ''}
-                >
-                    ${num}
-                </button>
-            `).join('');
-
-            const html = `
-                <div class="screen active" id="number-selection-screen">
-                    <button onclick="updateState({ screen: 'combinations', baseNumberCount: 0, baseNumbers: [] })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Base Number Count
-                    </button>
-                    
-                    <div class="text-center mb-8">
-                        <h2 class="text-4xl font-bold text-yellow-400 mb-2">${lotto.name}</h2>
-                        <p class="text-gray-400 text-lg">Select **${count} Base Numbers** (Range: 1 to ${range})</p>
-                    </div>
-
-                    <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 mb-8 shadow-xl">
-                        <div class="text-center mb-4">
-                            ${remaining > 0 
-                                ? `<p class="text-2xl font-bold text-red-400">Remaining to select: ${remaining} numbers</p>`
-                                : `<p class="text-2xl font-bold text-green-400 icon-check">All ${count} numbers selected!</p>`
-                            }
-                        </div>
-                        
-                        <div class="flex justify-center p-4">
-                            <div style="display: grid; grid-template-columns: repeat(${gridColumns}, 1fr); gap: 8px;">
-                                ${numberGrid}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button 
-                            onclick="generateMainBets()"
-                            class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-lg shadow-green-600/50 disabled:bg-gray-600 disabled:shadow-none"
-                            ${remaining > 0 ? 'disabled' : ''}
-                        >
-                            ${lotto.extra ? `Next: Select ${lotto.extra.name}` : `Generate ${lotto.type === 'pick5' ? FORMULAS_PICK5[count].length : FORMULAS_PICK6[count].length} Bets`}
+                    <div class="mt-8 text-center">
+                        <button onclick="resetApp()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-200 shadow-xl icon-dice">
+                            Start New Simulation
                         </button>
                     </div>
                 </div>
@@ -1206,130 +1127,8 @@
             appContainer.innerHTML = html;
         }
 
-        function renderExtraNumbersSelectionScreen() {
-            const lotto = state.selectedLottery;
-            const extra = lotto.extra;
-            const selectedNumbers = state.extraNumbers;
-            const remaining = extra.count - selectedNumbers.length;
+        // --- 4. RENDERIZADO INICIAL ---
 
-            const gridColumns = Math.min(10, Math.ceil(extra.range / 10)); 
-
-            const numberGrid = Array.from({ length: extra.range }, (_, i) => i + 1).map(num => `
-                <button 
-                    onclick="addExtraNumber(${num})" 
-                    class="grid-extra-number-button ${selectedNumbers.includes(num) ? 'selected' : ''}"
-                    ${selectedNumbers.length >= extra.count && !selectedNumbers.includes(num) ? 'disabled' : ''}
-                >
-                    ${num}
-                </button>
-            `).join('');
-            
-            const html = `
-                <div class="screen active" id="extra-selection-screen">
-                    <button onclick="updateState({ screen: 'numberSelection', extraNumbers: [] })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Main Numbers
-                    </button>
-                    
-                    <div class="text-center mb-8">
-                        <h2 class="text-4xl font-bold text-red-400 mb-2 icon-star">Select Your ${extra.name}</h2>
-                        <p class="text-gray-400 text-lg">Choose **${extra.count} numbers** (Range: 1 to ${extra.range}) for the ${extra.name}.</p>
-                    </div>
-                    
-                    <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 mb-8 shadow-xl">
-                        <div class="text-center mb-4">
-                            ${remaining > 0 
-                                ? `<p class="text-2xl font-bold text-red-400">Remaining to select: ${remaining} ${extra.name}</p>`
-                                : `<p class="text-2xl font-bold text-green-400 icon-check">All ${extra.count} ${extra.name} selected!</p>`
-                            }
-                        </div>
-                        
-                        <div class="flex justify-center p-4">
-                            <div style="display: grid; grid-template-columns: repeat(${gridColumns}, 1fr); gap: 8px;">
-                                ${numberGrid}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-center gap-4">
-                        <button 
-                            onclick="autoSelectExtraNumbers()"
-                            class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold text-xl py-3 px-8 rounded-full transition-colors duration-200 icon-magic shadow-lg shadow-yellow-600/50"
-                        >
-                            Select Randomly
-                        </button>
-                        
-                        <button 
-                            onclick="calculateAndGoToResults()"
-                            class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-xl py-3 px-8 rounded-full transition-colors duration-200 shadow-lg shadow-green-600/50 disabled:bg-gray-600 disabled:shadow-none"
-                            ${remaining > 0 ? 'disabled' : ''}
-                        >
-                            Generate All Bets
-                        </button>
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
-
-        function renderResultsScreen() {
-            const lotto = state.selectedLottery;
-            const combinations = state.finalCombinations;
-            const extraNumbers = state.extraNumbers;
-            const baseCount = state.baseNumberCount;
-
-            const html = `
-                <div class="screen active" id="results-screen">
-                    <button onclick="${lotto.extra ? "updateState({ screen: 'extraNumberSelection', finalCombinations: null })" : "updateState({ screen: 'numberSelection', finalCombinations: null })"}" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Selection
-                    </button>
-
-                    <div class="text-center mb-10">
-                        <h2 class="text-4xl font-bold text-green-400 mb-2 icon-check">Combinations Generated!</h2>
-                        <p class="text-gray-400 text-lg">Your **${combinations.length} reduced bets** for ${lotto.name}.</p>
-                        <div class="text-gray-500 text-sm mt-1">
-                            <p>Base Numbers (${baseCount}): ${state.baseNumbers.join(', ')}</p>
-                            ${lotto.extra ? `<p>${lotto.extra.name}: ${extraNumbers.join(', ')}</p>` : ''}
-                        </div>
-                    </div>
-
-                    <div class="text-center mb-6">
-                        <button 
-                            onclick="exportToTxt()"
-                            class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 icon-export flex items-center justify-center mx-auto"
-                        >
-                            Export Combinations to .TXT File
-                        </button>
-                    </div>
-
-                    <div class="bg-gray-800/70 p-6 rounded-2xl border border-green-500/30 shadow-2xl">
-                        <h3 class="text-2xl font-bold text-white mb-4">Your Final Bets:</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-2">
-                            ${combinations.map((bet, index) => `
-                                <div class="p-3 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700 hover:border-yellow-500 transition-colors duration-200">
-                                    <span class="text-sm font-semibold text-yellow-300">#${index + 1}:</span>
-                                    <div class="flex gap-2 items-center">
-                                        ${bet.map(num => `
-                                            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500 text-gray-900 font-bold shadow-md">${num}</span>
-                                        `).join('')}
-                                        
-                                        ${extraNumbers.length > 0 ? `
-                                            <span class="text-lg text-gray-400 ml-2">|</span>
-                                            ${extraNumbers.map(num => `
-                                                <span class="extra-ball-display">${num}</span>
-                                            `).join('')}
-                                        ` : ''}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            appContainer.innerHTML = html;
-        }
-
-
-        // --- 4. FUNCIÓN PRINCIPAL DE RENDERIZADO ---
         function renderApp() {
             switch (state.screen) {
                 case 'continent':
@@ -1338,11 +1137,8 @@
                 case 'country':
                     renderCountryScreen();
                     break;
-                case 'lottery':
-                    renderLotteryScreen();
-                    break;
-                case 'combinations':
-                    renderCombinationsScreen();
+                case 'baseNumberCount':
+                    renderBaseNumberCountScreen();
                     break;
                 case 'numberSelection':
                     renderNumberSelectionScreen();
@@ -1353,12 +1149,11 @@
                 case 'results':
                     renderResultsScreen();
                     break;
-                // Nuevas pantallas del simulador
                 case 'simLotterySelection':
                     renderSimLotterySelectionScreen();
                     break;
-                case 'simBaseCountSelection':
-                    renderSimBaseCountSelectionScreen();
+                case 'simBaseCount':
+                    renderSimBaseCountScreen();
                     break;
                 case 'simNumberInput':
                     renderSimNumberInputScreen();
@@ -1371,24 +1166,21 @@
             }
         }
 
-        // 5. REGISTRO DEL SERVICE WORKER (Para la funcionalidad PWA)
+        // --- 5. REGISTRO DEL SERVICE WORKER ---
         if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            // Nota: El service worker debe estar en la raíz o en un scope que cubra todos los archivos.
-            // Asumiendo que index.html y service-worker.js están en la misma carpeta raíz (/)
-            navigator.serviceWorker.register('/service-worker.js')
-              .then(registration => {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-              })
-              .catch(error => {
-                console.log('ServiceWorker registration failed: ', error);
-              });
-          });
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
         }
 
-        // Inicializar la aplicación al cargar la página
-        document.addEventListener('DOMContentLoaded', renderApp);
-
+        // Initial render
+        renderApp();
     </script>
 </body>
 </html>
