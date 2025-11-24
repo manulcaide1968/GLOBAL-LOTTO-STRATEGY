@@ -1,8 +1,7 @@
 const CACHE_NAME = 'gls-v1';
 const urlsToCache = [
-  '/',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/index.html',
+  '/'
 ];
 
 self.addEventListener('install', event => {
@@ -18,13 +17,18 @@ self.addEventListener('fetch', event => {
       .then(response => response || fetch(event.request))
   );
 });
-```
 
-**Estructura de archivos final:**
-```
-/
-├── index.html (tu archivo HTML)
-├── icon-192.png (imagen 1 o 2)
-├── icon-512.png (imagen 1 o 2, tamaño 512x512)
-├── manifest.json
-└── service-worker.js
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
