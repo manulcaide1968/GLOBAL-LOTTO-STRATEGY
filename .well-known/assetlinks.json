@@ -1,1 +1,8 @@
-
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.manulcaide1968.twa",
+        "sha256_cert_fingerprints": ["F4:87:0A:4D:F8:4B:AE:20:AE:4D:7E:DC:7C:86:E9:16:CD:09:C5:A9:19:1C:B2:78:97:E7:AB:DF:C5:67:B8:87"]
+      }
+    }]
