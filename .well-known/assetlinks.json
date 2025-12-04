@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "web",
-      "site": "https://manulcaide1968.github.io/twa",
+      "site": "https://manulcaide1968.github.io",
       "sha256_cert_fingerprints":
         ["67:8E:CF:CE:47:5E:D8:46:BB:5A:3A:E5:86:B0:94:08:20:CD:C5:45:69:F3:77:DC:F5:16:6E:21:F3:94:F1:F6"]
     }
