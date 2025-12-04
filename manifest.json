@@ -5,6 +5,7 @@
   "start_url": "/GLOBAL-LOTTO-STRATEGY/index.html",
   "scope": "/GLOBAL-LOTTO-STRATEGY/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
   "orientation": "portrait-primary",
   "background_color": "#030712",
   "theme_color": "#f59e0b",
@@ -24,3 +25,4 @@
     }
   ]
 }
+
