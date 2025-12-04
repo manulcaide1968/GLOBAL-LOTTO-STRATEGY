@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+<meta http-equiv="content-language" content="en">
+<meta name="format-detection" content="telephone=no">
     <title>Global Lotto Strategy - Pyramidal Algorithm Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -156,6 +159,13 @@
         .sim-number-button:hover:not(.selected):not([disabled]) {
             background-color: #60a5fa; /* blue-400 */
         }
+        /* Protección para banderas contra traducción automática */
+.flag-protected {
+    display: inline-block;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
     </style>
 </head>
 <body class="min-h-screen bg-gray-950 p-6 text-gray-200">
@@ -351,9 +361,47 @@
 
         const appContainer = document.getElementById('app-container');
 
-        function updateState(newState) {
-            state = { ...state, ...newState };
-            renderApp();
+        // HISTORIAL DE NAVEGACIÓN PARA EL BOTÓN BACK
+const navigationHistory = [];
+
+function updateState(newState) {
+    // Guardar el estado anterior en el historial (solo si cambia de pantalla)
+    if (newState.screen && newState.screen !== state.screen) {
+        navigationHistory.push({
+            screen: state.screen,
+            data: { ...state }
+        });
+        
+        // Agregar entrada al historial del navegador
+        window.history.pushState(
+            { screen: newState.screen }, 
+            '', 
+            `#${newState.screen}`
+        );
+    }
+    
+    state = { ...state, ...newState };
+    renderApp();
+}
+
+// MANEJAR EL BOTÓN BACK DEL MÓVIL
+window.addEventListener('popstate', function(event) {
+    if (navigationHistory.length > 0) {
+        // Recuperar el estado anterior
+        const previousState = navigationHistory.pop();
+        state = { ...previousState.data };
+        renderApp();
+    } else {
+        // Si no hay historial, volver a la pantalla inicial
+        state.screen = 'continent';
+        renderApp();
+    }
+});
+
+// PREVENIR QUE EL PRIMER LOAD AGREGUE AL HISTORIAL
+window.addEventListener('load', function() {
+    window.history.replaceState({ screen: 'continent' }, '', '#continent');
+});
         }
 
         function resetApp() {
@@ -701,7 +749,7 @@
                                     <div class="flex items-center justify-between">
                                         <div class="text-left">
                                             <h3 class="text-2xl font-bold mb-1 text-white flex items-center gap-2">
-                                                <span class="flag-icon text-base">${lottery.flag}</span>
+                                               <span class="flag-icon text-base flag-protected" translate="no">${lottery.flag}</span>
                                                 ${lottery.name}
                                             </h3>
                                             <p class="text-gray-400 text-sm">
@@ -1005,7 +1053,7 @@
                     
                     <div class="text-center mb-10">
                         <div class="flex items-center justify-center gap-4 mb-2">
-                            <span class="flag-icon">${countriesData[Object.keys(countriesData)[0]].flag}</span>
+                            <span class="flag-icon flag-protected" translate="no">${countriesData[Object.keys(countriesData)[0]].flag}</span>
                             <h2 class="text-4xl font-bold text-white mb-2 tracking-wide">${state.selectedContinent}</h2>
                         </div>
                         <p class="text-gray-400 text-lg">Select the Country</p>
@@ -1020,7 +1068,7 @@
                                     class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
                                 >
                                     <div class="flex items-center gap-4">
-                                        <span class="flag-icon">${country.flag}</span>
+                                        <span class="flag-icon flag-protected" translate="no">${country.flag}</span>
                                         <div>
                                             <span>${countryKey}</span>
                                             <span class="text-sm text-gray-400 block font-normal">${country.nativeName}</span>
@@ -1047,7 +1095,7 @@
                     
                     <div class="text-center mb-10">
                         <div class="flex items-center justify-center gap-4 mb-2">
-                            <span class="flag-icon">${countryData.flag}</span>
+                            <span class="flag-icon flag-protected" translate="no">${countryData.flag}</span>
                             <h2 class="text-4xl font-bold text-yellow-400 tracking-wide">${state.selectedCountry}</h2>
                         </div>
                         <p class="text-gray-400 text-lg">Select the Lottery</p>
@@ -1392,5 +1440,6 @@
     </script>
 </body>
 </html>
+
 
 
