@@ -14,6 +14,65 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/GLOBAL-LOTTO-STRATEGY/icon-192.png">
+    /* === PANTALLA LICENCIA === */
+#license-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.license-box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.license-box h1 { color: #333; margin-bottom: 10px; font-size: 24px; }
+.license-box p { color: #666; margin-bottom: 0; }
+.license-box input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 20px 0;
+}
+.license-box input:focus { outline: none; border-color: #667eea; }
+.license-box button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.license-box button:hover { transform: translateY(-2px); }
+.license-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+.error-msg { color: #e74c3c; margin-top: 15px; font-size: 14px; display: none; }
+
+#main-app { display: none; }
+body.unlocked #license-screen { display: none; }
+body.unlocked #main-app { display: block; }
     <style>
         /* Estilos base para el fondo y la fuente */
         body {
@@ -169,6 +228,18 @@
     </style>
 </head>
 <body class="min-h-screen bg-gray-950 p-6 text-gray-200">
+    <div id="license-screen">
+    <div class="license-box">
+        <div style="font-size: 48px; margin-bottom: 15px;">🎰</div>
+        <h1>Global Lotto Strategy</h1>
+        <p style="margin-bottom: 20px;">Ingresa tu código de licencia</p>
+        <input type="text" id="license-input" placeholder="XXXX-XXXX-XXXX" maxlength="20">
+        <button onclick="checkLicense()">Activar</button>
+        <p class="error-msg" id="error-msg">❌ Código inválido</p>
+    </div>
+</div>
+
+<div id="main-app" class="min-h-screen bg-gray-950 p-6 text-gray-200">
 
     <div class="max-w-5xl mx-auto">
         <div class="mb-8 text-center">
@@ -180,6 +251,74 @@
 
     <script>
         // --- 1. DATOS GLOBALES ---
+        // --- CONFIGURACIÓN PAYHIP ---
+const PAYHIP_API_KEY = 'TU_API_KEY_AQUI'; // Cámbialo cuando tengas la clave
+const PAYHIP_PRODUCT_LINK = 'TU_PRODUCT_ID'; // Cámbialo cuando crees el producto
+
+window.addEventListener('load', function() {
+    const saved = localStorage.getItem('lottoLicenseValid');
+    if (saved === 'true') {
+        document.body.classList.add('unlocked');
+    }
+});
+
+async function checkLicense() {
+    const code = document.getElementById('license-input').value.trim();
+    const errorMsg = document.getElementById('error-msg');
+    const button = document.querySelector('#license-screen button');
+    
+    if (!code) {
+        errorMsg.textContent = '❌ Ingresa un código';
+        errorMsg.style.display = 'block';
+        setTimeout(() => errorMsg.style.display = 'none', 3000);
+        return;
+    }
+    
+    // Mostrar loading
+    button.textContent = 'Verificando...';
+    button.disabled = true;
+    
+    try {
+        const response = await fetch('https://payhip.com/api/v1/license/verify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'payhip-api-key': PAYHIP_API_KEY
+            },
+            body: JSON.stringify({
+                product_link: PAYHIP_PRODUCT_LINK,
+                license_key: code
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.sale) {
+            // Licencia válida
+            localStorage.setItem('lottoLicenseValid', 'true');
+            localStorage.setItem('lottoLicenseCode', code);
+            document.body.classList.add('unlocked');
+            renderApp();
+        } else {
+            // Licencia inválida
+            errorMsg.textContent = '❌ Código inválido o ya usado';
+            errorMsg.style.display = 'block';
+            setTimeout(() => errorMsg.style.display = 'none', 3000);
+            button.textContent = 'Activar';
+            button.disabled = false;
+        }
+        
+    } catch (error) {
+        console.error('Error verificando licencia:', error);
+        errorMsg.textContent = '❌ Error de conexión. Intenta de nuevo';
+        errorMsg.style.display = 'block';
+        setTimeout(() => errorMsg.style.display = 'none', 3000);
+        button.textContent = 'Activar';
+        button.disabled = false;
+    }
+}
+
+// --- 1. DATOS GLOBALES ---
         const LOTTERIES = {
             "North America": {
                 "United States": { flag: "🇺🇸", nativeName: "United States", lotteries: [
@@ -1439,6 +1578,7 @@ window.addEventListener('load', function() {
     </script>
 </body>
 </html>
+
 
 
 
