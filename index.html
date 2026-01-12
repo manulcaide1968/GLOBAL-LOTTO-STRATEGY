@@ -231,9 +231,7 @@
         <input type="text" id="license-input" placeholder="XXXX-XXXX-XXXX" maxlength="20">
         <button onclick="checkLicense()">Activar</button>
         <p class="error-msg" id="error-msg">❌ Código inválido</p>
-        <p style="font-size: 12px; color: #999; margin-top: 20px;">
-            Para pruebas: <strong>DEMO-2025-TEST</strong>
-        </p>
+        
     </div>
 </div>
 
@@ -275,14 +273,7 @@ async function checkLicense() {
         return;
     }
     
-    // Código DEMO para pruebas
-    if (code === 'DEMO-2025-TEST') {
-        localStorage.setItem('lottoLicenseValid', 'true');
-        localStorage.setItem('lottoLicenseCode', code);
-        document.body.classList.add('unlocked');
-        renderApp();
-        return;
-    }
+  
     
     // Verificación real con Payhip
     button.textContent = 'Verificando...';
@@ -1550,6 +1541,7 @@ function renderLotteryScreen() {
     </script>
 </body>
 </html>
+
 
 
 
