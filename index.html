@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-    <meta http-equiv="content-language" content="en">
-    <meta name="format-detection" content="telephone=no">
+<meta http-equiv="content-language" content="en">
+<meta name="format-detection" content="telephone=no">
     <title>Global Lotto Strategy - Pyramidal Algorithm Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -15,75 +15,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/GLOBAL-LOTTO-STRATEGY/icon-192.png">
     <style>
-        /* === PANTALLA DE LICENCIA PAYHIP === */
-        #license-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9999;
-        }
-
-        .license-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .license-box h1 { color: #333; margin-bottom: 10px; font-size: 24px; }
-        .license-box p { color: #666; margin-bottom: 0; }
-        .license-box input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 20px 0;
-        }
-        .license-box input:focus { outline: none; border-color: #667eea; }
-        .license-box button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .license-box button:hover { transform: translateY(-2px); }
-        .license-box button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .error-msg { color: #e74c3c; margin-top: 15px; font-size: 14px; display: none; }
-
-        /* Control de visibilidad */
-        #main-app { display: none; }
-        body.unlocked #license-screen { display: none; }
-        body.unlocked #main-app { display: block; }
-
-        /* === ESTILOS ORIGINALES DE LA APP === */
+        /* Estilos base para el fondo y la fuente */
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-            background-color: #030712;
+            background-color: #030712; /* gray-950 */
         }
+        /* Ocultar pantallas no activas */
         .screen:not(.active) {
             display: none;
         }
+        /* Iconos de Lucide (usamos SVG o imágenes si no estamos en React, pero por simplicidad se usa texto/emojis como placeholder) */
         .icon-globe::before { content: "🌍"; margin-right: 0.5rem; }
         .icon-right::before { content: "→"; }
         .icon-left::before { content: "←"; }
@@ -97,11 +38,13 @@
         .icon-sim::before { content: "📊"; margin-right: 0.5rem; }
         .icon-money::before { content: "💰"; margin-right: 0.5rem; }
 
+        /* Estilos de bandera */
         .flag-icon {
-            font-size: 2.5rem;
-            line-height: 1;
+            font-size: 2.5rem; /* Ajuste el tamaño de la bandera */
+            line-height: 1; /* Asegura que el emoji no tenga espacio extra */
         }
         
+        /* Estilo para los números base seleccionados (Generación) */
         .selected-number-display {
             display: inline-flex;
             align-items: center;
@@ -109,13 +52,14 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #f59e0b;
-            color: #111827;
+            background-color: #f59e0b; /* amber-500 */
+            color: #111827; /* gray-900 */
             font-weight: bold;
             margin: 4px;
             transition: all 0.2s;
         }
 
+        /* Estilo para los botones de la cuadrícula de números principales (Generación) */
         .grid-number-button {
             width: 50px;
             height: 50px;
@@ -126,25 +70,26 @@
             font-weight: bold;
             font-size: 1.1rem;
             transition: all 0.15s;
-            background-color: #1f2937;
+            background-color: #1f2937; /* gray-800 */
             color: #fff;
-            border: 1px solid #374151;
+            border: 1px solid #374151; /* gray-700 */
             cursor: pointer;
         }
         .grid-number-button.selected {
-            background-color: #f59e0b;
-            color: #111827;
+            background-color: #f59e0b; /* amber-500 */
+            color: #111827; /* gray-900 */
             border-color: #f59e0b;
             transform: scale(1.1);
         }
         .grid-number-button:hover:not(.selected):not([disabled]) {
-            background-color: #4b5563;
+            background-color: #4b5563; /* gray-600 */
         }
         .grid-number-button[disabled] {
             cursor: not-allowed;
             opacity: 0.4;
         }
 
+        /* Estilo para los botones de la cuadrícula de números EXTRA (Generación) */
         .grid-extra-number-button {
             width: 50px;
             height: 50px;
@@ -155,24 +100,25 @@
             font-weight: bold;
             font-size: 1.1rem;
             transition: all 0.15s;
-            background-color: #dc2626;
+            background-color: #dc2626; /* red-600 */
             color: #fff;
-            border: 1px solid #ef4444;
+            border: 1px solid #ef4444; /* red-500 */
             cursor: pointer;
         }
         .grid-extra-number-button.selected {
-            background-color: #facc15;
-            color: #111827;
-            border-color: #eab308;
+            background-color: #facc15; /* yellow-400 */
+            color: #111827; /* gray-900 */
+            border-color: #eab308; /* yellow-600 */
             transform: scale(1.1);
         }
         .grid-extra-number-button:hover:not(.selected):not([disabled]) {
-            background-color: #ef4444;
+            background-color: #ef4444; /* red-500 */
         }
         .grid-extra-number-button[disabled] {
             cursor: not-allowed;
             opacity: 0.4;
         }
+        /* Estilo para mostrar las bolas extra en los resultados */
         .extra-ball-display {
             width: 40px;
             height: 40px;
@@ -180,7 +126,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background-color: #dc2626;
+            background-color: #dc2626; /* red-600 */
             color: #fff;
             font-weight: bold;
             font-size: 1rem;
@@ -188,6 +134,7 @@
             flex-shrink: 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
+        /* Estilo para los números del simulador (Ganadores) */
         .sim-number-button {
             width: 50px;
             height: 50px;
@@ -198,229 +145,234 @@
             font-weight: bold;
             font-size: 1.1rem;
             transition: all 0.15s;
-            background-color: #3b82f6;
+            background-color: #3b82f6; /* blue-500 */
             color: #fff;
-            border: 1px solid #60a5fa;
+            border: 1px solid #60a5fa; /* blue-400 */
             cursor: pointer;
         }
         .sim-number-button.selected {
-            background-color: #10b981;
-            color: #111827;
+            background-color: #10b981; /* emerald-500 */
+            color: #111827; /* gray-900 */
             border-color: #059669;
             transform: scale(1.1);
         }
         .sim-number-button:hover:not(.selected):not([disabled]) {
-            background-color: #60a5fa;
+            background-color: #60a5fa; /* blue-400 */
         }
-        .flag-protected {
-            display: inline-block;
-            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }
+        /* Protección para banderas contra traducción automática */
+.flag-protected {
+    display: inline-block;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
     </style>
 </head>
 <body class="min-h-screen bg-gray-950 p-6 text-gray-200">
 
-
-
-<!-- ==================== APP PRINCIPAL (ORIGINAL) ==================== -->
-<div id="main-app">
     <div class="max-w-5xl mx-auto">
         <div class="mb-8 text-center">
             <div class="text-4xl font-extrabold text-yellow-500">GLOBAL LOTTO PRO</div>
         </div>
         <div id="app-container">
-        </div>
+            </div>
     </div>
-</div>
-<script>
+
+    <script>
+        // --- 1. DATOS GLOBALES ---
+        const LOTTERIES = {
+            "North America": {
+                "United States": { flag: "🇺🇸", nativeName: "United States", lotteries: [
+                    { name: "Powerball", type: "pick5", range: 69, extra: { name: "Powerball", range: 26, count: 1 } },
+                    { name: "Mega Millions", type: "pick5", range: 70, extra: { name: "Mega Ball", range: 25, count: 1 } }
+                ]},
+                "Canada": { flag: "🇨🇦", nativeName: "Canada", lotteries: [
+                    { name: "Lotto 6/49", type: "pick6", range: 49 }
+                ]}
+            },
+            "Europe": {
+                "Transnational": { flag: "🇪🇺", nativeName: "Europe", lotteries: [
+                    { name: "EuroMillions", type: "pick5", range: 50, extra: { name: "Lucky Stars", range: 12, count: 2 } },
+                    { name: "EuroJackpot", type: "pick5", range: 50, extra: { name: "Euro Numbers", range: 12, count: 2 } }
+                ]},
+                "Spain": { flag: "🇪🇸", nativeName: "España", lotteries: [
+                    { name: "La Primitiva", type: "pick6", range: 49 }
+                ]},
+                "Italy": { flag: "🇮🇹", nativeName: "Italia", lotteries: [
+                    { name: "SuperEnalotto", type: "pick6", range: 90 }
+                ]},
+                "United Kingdom": { flag: "🇬🇧", nativeName: "United Kingdom", lotteries: [
+                    { name: "UK National Lottery", type: "pick6", range: 59 }
+                ]},
+                "Germany": { flag: "🇩🇪", nativeName: "Deutschland", lotteries: [
+                    { name: "Lotto 6 aus 49", type: "pick6", range: 49 }
+                ]}
+            },
+            "South America": {
+                "Brazil": { flag: "🇧🇷", nativeName: "Brasil", lotteries: [
+                    { name: "Mega-Sena", type: "pick6", range: 60 }
+                ]},
+                "Argentina": { flag: "🇦🇷", nativeName: "Argentina", lotteries: [
+                    { name: "Loto", type: "pick6", range: 46 }
+                ]},
+                "Colombia": { flag: "🇨🇴", nativeName: "Colombia", lotteries: [
+                    { name: "Baloto", type: "pick5", range: 43, extra: { name: "Superbalota", range: 16, count: 1 } }
+                ]}
+            },
+            "Asia": {
+                "Philippines": { flag: "🇵🇭", nativeName: "Philippines", lotteries: [
+                    { name: "Grand Lotto 6/55", type: "pick6", range: 55 },
+                    { name: "Ultra Lotto 6/58", type: "pick6", range: 58 }
+                ]},
+                "Hong Kong": { flag: "🇭🇰", nativeName: "香港", lotteries: [
+                    { name: "Mark Six", type: "pick6", range: 49 }
+                ]},
+                "Singapore": { flag: "🇸🇬", nativeName: "Singapore", lotteries: [
+                    { name: "Toto", type: "pick6", range: 49 }
+                ]}
+            },
+            "Oceania": {
+                "Australia": { flag: "🇦🇺", nativeName: "Australia", lotteries: [
+                    { name: "Oz Lotto", type: "pick6", range: 47 },
+                    { name: "Powerball Australia", type: "pick6", range: 35, extra: { name: "Powerball", range: 20, count: 1 } }
+                ]}
+            },
+            "Africa": {
+                "South Africa": { flag: "🇿🇦", nativeName: "South Africa", lotteries: [
+                    { name: "South African Lotto", type: "pick6", range: 52 }
+                ]}
+            }
+        };
+
+        // --- Fórmulas Pick 5 y Pick 6 (Sin cambios) ---
+        const FORMULAS_PICK5 = {
+            8: [[1,2,4,7,8],[1,3,5,6,7],[2,3,4,6,8]],
+            9: [[1,2,5,6,8],[1,2,3,4,7],[3,4,6,7,8],[1,3,6,7,9],[2,5,7,8,9],[1,3,4,5,9]],
+            10: [[2,4,5,6,10],[1,5,6,7,9],[2,3,5,6,8],[1,3,5,9,10],[2,7,8,9,10],[4,5,7,8,10],[3,4,6,7,9],[1,3,6,8,10],[1,2,3,4,7],[1,2,4,8,9]],
+            11: [[2,4,6,7,11],[2,3,5,6,10],[1,2,6,8,9],[1,3,4,10,11],[4,5,8,9,11],[3,7,8,9,10],[1,4,5,6,7],[3,6,7,9,11],[5,6,8,10,11],[2,3,4,7,8],[2,4,5,9,10],[1,2,7,10,11],[1,2,3,5,9],[1,3,4,6,8],[1,5,7,8,10]],
+            12: [[1,2,4,6,9],[1,5,8,9,12],[1,3,9,10,11],[1,6,7,8,10],[1,4,7,11,12],[1,2,3,5,7],[3,6,7,9,12],[4,5,7,9,10],[2,7,8,9,11],[4,5,6,8,11],[2,5,6,10,12],[2,3,4,8,12],[3,4,6,10,11],[1,2,6,11,12],[1,2,4,8,10],[3,5,6,8,9],[8,9,10,11,12],[3,5,7,11,12],[2,4,5,9,11],[1,3,4,5,6]],
+            13: [[1,2,3,4,5],[1,2,6,7,8],[1,2,9,10,11],[1,3,6,9,12],[1,3,7,10,13],[1,4,6,11,13],[1,4,8,10,12],[1,5,7,11,12],[1,5,8,9,13],[2,3,8,11,12],[2,4,7,9,12],[2,5,6,10,12],[2,3,6,9,13],[2,4,8,10,13],[2,5,7,11,13],[3,4,5,6,7],[3,4,8,9,11],[5,6,8,10,11],[6,7,8,12,13],[9,10,11,12,13],[3,4,5,12,13],[3,5,7,9,10],[4,6,7,9,10],[2,4,6,11,12],[2,5,8,9,12],[3,4,7,10,11],[1,3,6,8,10]],
+            14: [[4,6,7,8,10],[1,3,7,10,12],[5,7,9,10,14],[5,6,7,11,12],[3,6,7,13,14],[4,7,9,12,13],[1,4,7,11,14],[3,7,8,9,11],[1,5,7,8,13],[1,6,9,10,11],[3,4,5,10,11],[8,10,11,12,14],[5,6,10,12,13],[1,4,10,13,14],[3,8,9,10,13],[3,4,6,8,12],[1,4,5,6,9],[1,8,9,12,14],[1,3,11,12,13],[5,9,11,13,14],[4,6,8,11,13],[3,5,6,8,14],[3,4,5,12,14],[4,9,10,11,12],[1,5,8,10,11],[3,4,6,9,14],[1,6,7,12,14],[2,7,10,11,13],[1,2,3,4,8],[2,5,8,9,12],[1,2,6,9,13],[2,3,5,6,7],[2,6,11,12,14],[2,4,7,8,14],[1,2,3,10,14]],
+            15: [[1,2,3,4,5],[1,2,6,7,8],[1,2,9,10,11],[1,2,12,13,14],[1,3,6,9,12],[1,3,7,10,13],[1,3,8,11,14],[1,4,6,10,14],[1,4,7,9,15],[1,5,6,11,13],[1,5,8,10,12],[2,3,6,10,15],[2,3,7,9,14],[2,4,6,9,13],[2,4,7,10,12],[2,4,8,11,15],[2,5,7,13,15],[3,4,6,7,11],[3,4,8,9,10],[3,4,12,13,15],[3,5,9,11,15],[4,5,7,8,14],[4,9,11,12,14],[5,6,7,9,10],[5,6,12,14,15],[7,8,9,11,13],[7,10,11,14,15],[2,5,8,9,12],[2,8,10,13,14],[3,5,6,8,13],[3,7,8,12,15],[4,5,10,11,13],[6,8,9,14,15],[6,8,10,11,12],[9,10,12,13,15],[1,5,7,11,12],[1,5,9,13,14],[2,3,11,12,13],[2,5,6,11,14],[3,5,10,12,14],[6,7,12,13,14],[1,4,8,12,13]]
+        };
+
+        const FORMULAS_PICK6 = {
+            9: [[1,2,3,5,6,8],[1,2,4,5,6,9],[1,2,5,6,7,9],[1,3,4,5,6,7],[1,3,5,6,8,9],[1,4,5,6,7,8],[2,3,4,7,8,9]],
+            10: [[1,2,4,5,7,9],[2,4,6,7,8,10],[1,2,3,6,8,9],[3,5,7,8,9,10],[2,4,5,6,9,10],[1,3,4,8,9,10],[3,4,5,6,7,8],[1,2,3,5,6,10],[1,3,6,7,9,10],[1,2,5,7,8,10]],
+            11: [[2,3,4,6,7,9],[3,4,5,7,8,10],[4,5,6,8,9,11],[1,5,6,7,9,10],[2,6,7,8,10,11],[1,3,7,8,9,11],[1,2,4,8,9,10],[2,3,5,9,10,11],[1,3,4,6,10,11],[1,2,4,5,7,11],[1,2,3,5,6,8],[1,2,3,4,5,9],[1,2,3,6,7,10],[1,2,5,8,10,11],[1,4,5,6,7,8]],
+            12: [[2,3,4,6,7,9],[3,4,5,7,8,10],[4,5,6,8,9,11],[1,5,6,7,9,12],[2,6,7,8,10,12],[1,3,7,8,9,11],[1,2,4,8,9,12],[2,3,5,9,10,11],[1,3,4,6,10,12],[1,2,4,5,7,11],[1,2,3,5,6,8],[1,2,4,10,11,12],[1,5,8,10,11,12],[3,5,6,7,11,12],[4,7,9,10,11,12],[2,3,4,8,11,12],[1,2,6,9,10,11],[3,6,8,9,10,12],[1,2,3,7,10,12],[2,4,5,6,10,12]],
+            13: [[2,4,7,8,9,10],[4,6,7,10,11,12],[1,6,7,9,11,13],[2,5,6,8,9,10],[1,6,7,8,10,11],[1,2,4,6,10,13],[1,8,10,11,12,13],[5,7,8,9,10,13],[1,3,4,6,12,13],[3,4,6,10,12,13],[3,6,7,8,10,13],[4,5,6,8,9,10],[3,6,7,8,9,10],[1,4,5,6,8,10],[2,3,6,8,10,12],[4,5,6,10,11,13],[2,4,6,8,10,11],[4,5,6,8,9,11],[3,9,10,11,12,13],[4,5,7,9,11,12],[1,6,8,9,11,12],[2,3,5,6,9,10],[1,4,7,8,11,12],[4,6,7,8,12,13],[1,2,8,11,12,13],[2,5,6,9,11,13],[1,5,7,8,10,12],[1,3,4,5,8,9],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,2,5,8,9,10],[3,6,7,8,10,11]],
+            14: [[2,5,7,8,10,14],[4,5,6,7,10,12],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,6,7,10,12,14],[2,4,6,10,13,14],[1,5,8,10,11,13],[5,7,8,9,13,14],[1,3,6,7,12,13],[3,4,6,8,13,14],[3,6,7,8,13,14],[4,5,6,8,10,14],[3,6,7,8,13,14],[3,4,5,6,8,10],[3,6,7,8,10,12],[4,5,6,10,11,13],[2,5,6,8,11,14],[2,4,5,6,11,14],[3,9,10,11,12,13],[1,4,7,9,11,12],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,5,8,11,12,14],[1,6,7,8,12,13],[1,2,7,11,12,13],[2,7,9,11,13,14],[1,5,7,8,10,12],[1,3,4,5,8,9],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,12,14],[3,7,8,9,10,11],[1,2,3,4,7,10],[1,2,3,5,13,14],[2,3,4,9,12,14],[2,4,8,10,11,12],[1,2,3,6,10,11],[1,2,4,6,9,13]],
+            15: [[2,5,7,8,10,14],[4,6,7,8,10,12],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,3,6,7,10,15],[2,4,6,10,12,13],[1,7,8,10,13,15],[2,5,7,8,13,14],[1,6,8,12,13,15],[3,4,6,13,14,15],[3,5,6,7,8,14],[3,4,5,6,8,10],[2,3,6,7,8,14],[4,5,6,8,10,11],[3,6,8,10,12,15],[4,5,6,10,11,15],[2,6,7,8,11,15],[3,4,5,6,11,14],[3,9,10,11,13,15],[4,7,9,11,12,13],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,8,11,12,14,15],[6,7,8,12,13,15],[1,6,11,12,13,15],[2,4,9,11,13,14],[1,5,7,8,10,13],[3,4,5,8,9,11],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,12,14],[1,2,3,4,5,7],[1,2,3,6,9,12],[1,2,3,8,10,11],[1,2,4,8,9,15],[1,2,5,10,12,15],[1,3,5,12,13,14],[2,3,4,11,12,15],[2,7,9,12,14,15],[1,2,5,6,11,13],[1,3,4,9,10,13],[1,4,5,7,14,15]],
+            16: [[2,7,8,10,14,16],[4,6,7,10,12,16],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,6,7,10,15,16],[2,4,6,10,13,16],[1,8,10,13,15,16],[5,7,8,13,14,16],[1,6,12,13,15,16],[3,4,6,13,14,16],[3,6,7,8,14,16],[4,5,6,8,10,16],[3,6,7,8,14,16],[4,5,6,8,10,16],[3,6,8,10,12,15],[4,5,6,10,11,15],[2,6,8,11,15,16],[4,5,6,11,14,16],[3,9,10,11,13,16],[4,7,9,11,12,16],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,8,11,12,14,15],[6,7,8,12,13,15],[1,11,12,13,15,16],[2,9,11,13,14,16],[1,5,7,8,10,16],[3,4,5,8,9,16],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,14,16],[3,7,8,10,11,16],[1,2,3,4,5,6],[1,2,3,7,8,9],[1,2,3,10,11,12],[1,2,3,13,14,15],[1,2,4,7,11,13],[1,2,4,8,12,16],[1,2,4,9,10,15],[1,2,5,7,12,14],[1,3,4,7,10,14],[1,3,4,9,12,13],[1,3,5,7,11,15],[1,5,10,11,13,14],[2,3,4,7,12,15],[2,3,4,8,11,14],[2,3,5,7,10,13],[2,3,6,9,12,16]]
+        };
+        // --- FIN DE FÓRMULAS ---
 
 
-// ==================== CÓDIGO ORIGINAL DE LA APP (SIN CAMBIOS) ====================
+        // --- CORE LOGIC: Mapeo de números base a combinaciones finales ---
+        function mapBaseNumbersToCombinations(baseNumbers, formula) {
+            const finalBets = [];
+            const sortedBaseNumbers = [...baseNumbers].sort((a, b) => a - b); 
 
-// --- 1. DATOS GLOBALES ---
-const LOTTERIES = {
-    "North America": {
-        "United States": { flag: "🇺🇸", nativeName: "United States", lotteries: [
-            { name: "Powerball", type: "pick5", range: 69, extra: { name: "Powerball", range: 26, count: 1 } },
-            { name: "Mega Millions", type: "pick5", range: 70, extra: { name: "Mega Ball", range: 25, count: 1 } }
-        ]},
-        "Canada": { flag: "🇨🇦", nativeName: "Canada", lotteries: [
-            { name: "Lotto 6/49", type: "pick6", range: 49 }
-        ]}
-    },
-    "Europe": {
-        "Transnational": { flag: "🇪🇺", nativeName: "Europe", lotteries: [
-            { name: "EuroMillions", type: "pick5", range: 50, extra: { name: "Lucky Stars", range: 12, count: 2 } },
-            { name: "EuroJackpot", type: "pick5", range: 50, extra: { name: "Euro Numbers", range: 12, count: 2 } }
-        ]},
-        "Spain": { flag: "🇪🇸", nativeName: "España", lotteries: [
-            { name: "La Primitiva", type: "pick6", range: 49 }
-        ]},
-        "Italy": { flag: "🇮🇹", nativeName: "Italia", lotteries: [
-            { name: "SuperEnalotto", type: "pick6", range: 90 }
-        ]},
-        "United Kingdom": { flag: "🇬🇧", nativeName: "United Kingdom", lotteries: [
-            { name: "UK National Lottery", type: "pick6", range: 59 }
-        ]},
-        "Germany": { flag: "🇩🇪", nativeName: "Deutschland", lotteries: [
-            { name: "Lotto 6 aus 49", type: "pick6", range: 49 }
-        ]}
-    },
-    "South America": {
-        "Brazil": { flag: "🇧🇷", nativeName: "Brasil", lotteries: [
-            { name: "Mega-Sena", type: "pick6", range: 60 }
-        ]},
-        "Argentina": { flag: "🇦🇷", nativeName: "Argentina", lotteries: [
-            { name: "Loto", type: "pick6", range: 46 }
-        ]},
-        "Colombia": { flag: "🇨🇴", nativeName: "Colombia", lotteries: [
-            { name: "Baloto", type: "pick5", range: 43, extra: { name: "Superbalota", range: 16, count: 1 } }
-        ]}
-    },
-    "Asia": {
-        "Philippines": { flag: "🇵🇭", nativeName: "Philippines", lotteries: [
-            { name: "Grand Lotto 6/55", type: "pick6", range: 55 },
-            { name: "Ultra Lotto 6/58", type: "pick6", range: 58 }
-        ]},
-        "Hong Kong": { flag: "🇭🇰", nativeName: "香港", lotteries: [
-            { name: "Mark Six", type: "pick6", range: 49 }
-        ]},
-        "Singapore": { flag: "🇸🇬", nativeName: "Singapore", lotteries: [
-            { name: "Toto", type: "pick6", range: 49 }
-        ]}
-    },
-    "Oceania": {
-        "Australia": { flag: "🇦🇺", nativeName: "Australia", lotteries: [
-            { name: "Oz Lotto", type: "pick6", range: 47 },
-            { name: "Powerball Australia", type: "pick6", range: 35, extra: { name: "Powerball", range: 20, count: 1 } }
-        ]}
-    },
-    "Africa": {
-        "South Africa": { flag: "🇿🇦", nativeName: "South Africa", lotteries: [
-            { name: "South African Lotto", type: "pick6", range: 52 }
-        ]}
-    }
-};
+            formula.forEach(combination => {
+                const bet = combination.map(index => {
+                    return sortedBaseNumbers[index - 1]; 
+                });
+                finalBets.push(bet);
+            });
+            return finalBets;
+        }
+        
+        // Función para generar números aleatorios únicos
+        function getRandomUniqueNumbers(count, maxRange) {
+            const numbers = new Set();
+            while (numbers.size < count) {
+                const num = Math.floor(Math.random() * maxRange) + 1;
+                numbers.add(num);
+            }
+            return Array.from(numbers).sort((a, b) => a - b);
+        }
 
-// --- Fórmulas Pick 5 y Pick 6 ---
-const FORMULAS_PICK5 = {
-    8: [[1,2,4,7,8],[1,3,5,6,7],[2,3,4,6,8]],
-    9: [[1,2,5,6,8],[1,2,3,4,7],[3,4,6,7,8],[1,3,6,7,9],[2,5,7,8,9],[1,3,4,5,9]],
-    10: [[2,4,5,6,10],[1,5,6,7,9],[2,3,5,6,8],[1,3,5,9,10],[2,7,8,9,10],[4,5,7,8,10],[3,4,6,7,9],[1,3,6,8,10],[1,2,3,4,7],[1,2,4,8,9]],
-    11: [[2,4,6,7,11],[2,3,5,6,10],[1,2,6,8,9],[1,3,4,10,11],[4,5,8,9,11],[3,7,8,9,10],[1,4,5,6,7],[3,6,7,9,11],[5,6,8,10,11],[2,3,4,7,8],[2,4,5,9,10],[1,2,7,10,11],[1,2,3,5,9],[1,3,4,6,8],[1,5,7,8,10]],
-    12: [[1,2,4,6,9],[1,5,8,9,12],[1,3,9,10,11],[1,6,7,8,10],[1,4,7,11,12],[1,2,3,5,7],[3,6,7,9,12],[4,5,7,9,10],[2,7,8,9,11],[4,5,6,8,11],[2,5,6,10,12],[2,3,4,8,12],[3,4,6,10,11],[1,2,6,11,12],[1,2,4,8,10],[3,5,6,8,9],[8,9,10,11,12],[3,5,7,11,12],[2,4,5,9,11],[1,3,4,5,6]],
-    13: [[1,2,3,4,5],[1,2,6,7,8],[1,2,9,10,11],[1,3,6,9,12],[1,3,7,10,13],[1,4,6,11,13],[1,4,8,10,12],[1,5,7,11,12],[1,5,8,9,13],[2,3,8,11,12],[2,4,7,9,12],[2,5,6,10,12],[2,3,6,9,13],[2,4,8,10,13],[2,5,7,11,13],[3,4,5,6,7],[3,4,8,9,11],[5,6,8,10,11],[6,7,8,12,13],[9,10,11,12,13],[3,4,5,12,13],[3,5,7,9,10],[4,6,7,9,10],[2,4,6,11,12],[2,5,8,9,12],[3,4,7,10,11],[1,3,6,8,10]],
-    14: [[4,6,7,8,10],[1,3,7,10,12],[5,7,9,10,14],[5,6,7,11,12],[3,6,7,13,14],[4,7,9,12,13],[1,4,7,11,14],[3,7,8,9,11],[1,5,7,8,13],[1,6,9,10,11],[3,4,5,10,11],[8,10,11,12,14],[5,6,10,12,13],[1,4,10,13,14],[3,8,9,10,13],[3,4,6,8,12],[1,4,5,6,9],[1,8,9,12,14],[1,3,11,12,13],[5,9,11,13,14],[4,6,8,11,13],[3,5,6,8,14],[3,4,5,12,14],[4,9,10,11,12],[1,5,8,10,11],[3,4,6,9,14],[1,6,7,12,14],[2,7,10,11,13],[1,2,3,4,8],[2,5,8,9,12],[1,2,6,9,13],[2,3,5,6,7],[2,6,11,12,14],[2,4,7,8,14],[1,2,3,10,14]],
-    15: [[1,2,3,4,5],[1,2,6,7,8],[1,2,9,10,11],[1,2,12,13,14],[1,3,6,9,12],[1,3,7,10,13],[1,3,8,11,14],[1,4,6,10,14],[1,4,7,9,15],[1,5,6,11,13],[1,5,8,10,12],[2,3,6,10,15],[2,3,7,9,14],[2,4,6,9,13],[2,4,7,10,12],[2,4,8,11,15],[2,5,7,13,15],[3,4,6,7,11],[3,4,8,9,10],[3,4,12,13,15],[3,5,9,11,15],[4,5,7,8,14],[4,9,11,12,14],[5,6,7,9,10],[5,6,12,14,15],[7,8,9,11,13],[7,10,11,14,15],[2,5,8,9,12],[2,8,10,13,14],[3,5,6,8,13],[3,7,8,12,15],[4,5,10,11,13],[6,8,9,14,15],[6,8,10,11,12],[9,10,12,13,15],[1,5,7,11,12],[1,5,9,13,14],[2,3,11,12,13],[2,5,6,11,14],[3,5,10,12,14],[6,7,12,13,14],[1,4,8,12,13]]
-};
+        // --- FUNCIONALIDAD DE EXPORTACIÓN (Sin cambios) ---
+        function exportToTxt() {
+            const lotto = state.selectedLottery;
+            const combinations = state.finalCombinations;
+            const extraNumbers = state.extraNumbers;
+            
+            if (!combinations || combinations.length === 0) {
+                alert("No combinations to export.");
+                return;
+            }
+            
+            const extraInfo = extraNumbers.length > 0 
+                ? `Extra Balls (${lotto.extra.name}): ${extraNumbers.join(', ')}`
+                : "No extra balls selected/required.";
 
-const FORMULAS_PICK6 = {
-    9: [[1,2,3,5,6,8],[1,2,4,5,6,9],[1,2,5,6,7,9],[1,3,4,5,6,7],[1,3,5,6,8,9],[1,4,5,6,7,8],[2,3,4,7,8,9]],
-    10: [[1,2,4,5,7,9],[2,4,6,7,8,10],[1,2,3,6,8,9],[3,5,7,8,9,10],[2,4,5,6,9,10],[1,3,4,8,9,10],[3,4,5,6,7,8],[1,2,3,5,6,10],[1,3,6,7,9,10],[1,2,5,7,8,10]],
-    11: [[2,3,4,6,7,9],[3,4,5,7,8,10],[4,5,6,8,9,11],[1,5,6,7,9,10],[2,6,7,8,10,11],[1,3,7,8,9,11],[1,2,4,8,9,10],[2,3,5,9,10,11],[1,3,4,6,10,11],[1,2,4,5,7,11],[1,2,3,5,6,8],[1,2,3,4,5,9],[1,2,3,6,7,10],[1,2,5,8,10,11],[1,4,5,6,7,8]],
-    12: [[2,3,4,6,7,9],[3,4,5,7,8,10],[4,5,6,8,9,11],[1,5,6,7,9,12],[2,6,7,8,10,12],[1,3,7,8,9,11],[1,2,4,8,9,12],[2,3,5,9,10,11],[1,3,4,6,10,12],[1,2,4,5,7,11],[1,2,3,5,6,8],[1,2,4,10,11,12],[1,5,8,10,11,12],[3,5,6,7,11,12],[4,7,9,10,11,12],[2,3,4,8,11,12],[1,2,6,9,10,11],[3,6,8,9,10,12],[1,2,3,7,10,12],[2,4,5,6,10,12]],
-    13: [[2,4,7,8,9,10],[4,6,7,10,11,12],[1,6,7,9,11,13],[2,5,6,8,9,10],[1,6,7,8,10,11],[1,2,4,6,10,13],[1,8,10,11,12,13],[5,7,8,9,10,13],[1,3,4,6,12,13],[3,4,6,10,12,13],[3,6,7,8,10,13],[4,5,6,8,9,10],[3,6,7,8,9,10],[1,4,5,6,8,10],[2,3,6,8,10,12],[4,5,6,10,11,13],[2,4,6,8,10,11],[4,5,6,8,9,11],[3,9,10,11,12,13],[4,5,7,9,11,12],[1,6,8,9,11,12],[2,3,5,6,9,10],[1,4,7,8,11,12],[4,6,7,8,12,13],[1,2,8,11,12,13],[2,5,6,9,11,13],[1,5,7,8,10,12],[1,3,4,5,8,9],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,2,5,8,9,10],[3,6,7,8,10,11]],
-    14: [[2,5,7,8,10,14],[4,5,6,7,10,12],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,6,7,10,12,14],[2,4,6,10,13,14],[1,5,8,10,11,13],[5,7,8,9,13,14],[1,3,6,7,12,13],[3,4,6,8,13,14],[3,6,7,8,13,14],[4,5,6,8,10,14],[3,6,7,8,13,14],[3,4,5,6,8,10],[3,6,7,8,10,12],[4,5,6,10,11,13],[2,5,6,8,11,14],[2,4,5,6,11,14],[3,9,10,11,12,13],[1,4,7,9,11,12],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,5,8,11,12,14],[1,6,7,8,12,13],[1,2,7,11,12,13],[2,7,9,11,13,14],[1,5,7,8,10,12],[1,3,4,5,8,9],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,12,14],[3,7,8,9,10,11],[1,2,3,4,7,10],[1,2,3,5,13,14],[2,3,4,9,12,14],[2,4,8,10,11,12],[1,2,3,6,10,11],[1,2,4,6,9,13]],
-    15: [[2,5,7,8,10,14],[4,6,7,8,10,12],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,3,6,7,10,15],[2,4,6,10,12,13],[1,7,8,10,13,15],[2,5,7,8,13,14],[1,6,8,12,13,15],[3,4,6,13,14,15],[3,5,6,7,8,14],[3,4,5,6,8,10],[2,3,6,7,8,14],[4,5,6,8,10,11],[3,6,8,10,12,15],[4,5,6,10,11,15],[2,6,7,8,11,15],[3,4,5,6,11,14],[3,9,10,11,13,15],[4,7,9,11,12,13],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,8,11,12,14,15],[6,7,8,12,13,15],[1,6,11,12,13,15],[2,4,9,11,13,14],[1,5,7,8,10,13],[3,4,5,8,9,11],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,12,14],[1,2,3,4,5,7],[1,2,3,6,9,12],[1,2,3,8,10,11],[1,2,4,8,9,15],[1,2,5,10,12,15],[1,3,5,12,13,14],[2,3,4,11,12,15],[2,7,9,12,14,15],[1,2,5,6,11,13],[1,3,4,9,10,13],[1,4,5,7,14,15]],
-    16: [[2,7,8,10,14,16],[4,6,7,10,12,16],[1,6,7,9,11,14],[2,5,6,9,10,14],[1,6,7,10,15,16],[2,4,6,10,13,16],[1,8,10,13,15,16],[5,7,8,13,14,16],[1,6,12,13,15,16],[3,4,6,13,14,16],[3,6,7,8,14,16],[4,5,6,8,10,16],[3,6,7,8,14,16],[4,5,6,8,10,16],[3,6,8,10,12,15],[4,5,6,10,11,15],[2,6,8,11,15,16],[4,5,6,11,14,16],[3,9,10,11,13,16],[4,7,9,11,12,16],[1,6,8,9,11,14],[3,5,6,9,10,14],[1,8,11,12,14,15],[6,7,8,12,13,15],[1,11,12,13,15,16],[2,9,11,13,14,16],[1,5,7,8,10,16],[3,4,5,8,9,16],[3,6,7,8,11,12],[4,5,6,8,9,12],[1,8,9,10,14,16],[3,7,8,10,11,16],[1,2,3,4,5,6],[1,2,3,7,8,9],[1,2,3,10,11,12],[1,2,3,13,14,15],[1,2,4,7,11,13],[1,2,4,8,12,16],[1,2,4,9,10,15],[1,2,5,7,12,14],[1,3,4,7,10,14],[1,3,4,9,12,13],[1,3,5,7,11,15],[1,5,10,11,13,14],[2,3,4,7,12,15],[2,3,4,8,11,14],[2,3,5,7,10,13],[2,3,6,9,12,16]]
-};
+            const header = `--- Global Lotto Strategy Combinations ---\n`;
+            const info = `Lottery: ${lotto.name}\nBase Numbers (${state.baseNumberCount}): ${state.baseNumbers.join(', ')}\nTotal Bets: ${combinations.length}\n${extraInfo}\n\n`;
+            
+            const combinationsText = combinations.map((bet, index) => {
+                // Formato: N1, N2, N3, N4, N5 | E1, E2
+                const mainNumbers = bet.join(', ');
+                const extraPart = extraNumbers.length > 0 ? ` | ${extraNumbers.join(', ')}` : '';
+                return `${mainNumbers}${extraPart}`; 
+            }).join('\n');
 
-// --- CORE LOGIC ---
-function mapBaseNumbersToCombinations(baseNumbers, formula) {
-    const finalBets = [];
-    const sortedBaseNumbers = [...baseNumbers].sort((a, b) => a - b); 
+            const footer = `\n--- END OF FILE ---\n\nDISCLAIMER: This file is for entertainment and theoretical strategy only and does not guarantee winnings. Gamble responsibly.`;
 
-    formula.forEach(combination => {
-        const bet = combination.map(index => {
-            return sortedBaseNumbers[index - 1]; 
-        });
-        finalBets.push(bet);
-    });
-    return finalBets;
-}
+            const fileContent = header + info + combinationsText + footer;
+            
+            // Generar nombre de archivo (ej: Powerball_10Bases_20251124.txt)
+            const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            const filename = `${lotto.name.replace(/\s/g, '')}_${state.baseNumberCount}Bases_${date}.txt`;
 
-function getRandomUniqueNumbers(count, maxRange) {
-    const numbers = new Set();
-    while (numbers.size < count) {
-        const num = Math.floor(Math.random() * maxRange) + 1;
-        numbers.add(num);
-    }
-    return Array.from(numbers).sort((a, b) => a - b);
-}
+            // Crear el blob y descargar el archivo
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
 
-// --- EXPORTACIÓN ---
-function exportToTxt() {
-    const lotto = state.selectedLottery;
-    const combinations = state.finalCombinations;
-    const extraNumbers = state.extraNumbers;
-    
-    if (!combinations || combinations.length === 0) {
-        alert("No combinations to export.");
-        return;
-    }
-    
-    const extraInfo = extraNumbers.length > 0 
-        ? `Extra Balls (${lotto.extra.name}): ${extraNumbers.join(', ')}`
-        : "No extra balls selected/required.";
 
-    const header = `--- Global Lotto Strategy Combinations ---\n`;
-    const info = `Lottery: ${lotto.name}\nBase Numbers (${state.baseNumberCount}): ${state.baseNumbers.join(', ')}\nTotal Bets: ${combinations.length}\n${extraInfo}\n\n`;
-    
-    const combinationsText = combinations.map((bet, index) => {
-        const mainNumbers = bet.join(', ');
-        const extraPart = extraNumbers.length > 0 ? ` | ${extraNumbers.join(', ')}` : '';
-        return `${mainNumbers}${extraPart}`; 
-    }).join('\n');
+        // --- 2. GESTIÓN DE ESTADO Y NAVEGACIÓN ---
+        let state = {
+            screen: 'continent',
+            // Datos para la generación de apuestas
+            selectedContinent: null,
+            selectedCountry: null,
+            selectedLottery: null,
+            baseNumberCount: 0,
+            baseNumbers: [], 
+            finalCombinations: null,
+            extraNumbers: [],
+            // Datos para la simulación
+            simLottery: null,
+            simBaseCount: 0,
+            simBaseNumbers: [],
+            simWinningNumbers: [],
+            simWinningExtraNumbers: [],
+            simResults: null,
+        };
 
-    const footer = `\n--- END OF FILE ---\n\nDISCLAIMER: This file is for entertainment and theoretical strategy only and does not guarantee winnings. Gamble responsibly.`;
+        const appContainer = document.getElementById('app-container');
 
-    const fileContent = header + info + combinationsText + footer;
-    
-    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const filename = `${lotto.name.replace(/\s/g, '')}_${state.baseNumberCount}Bases_${date}.txt`;
-
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-// --- 2. GESTIÓN DE ESTADO Y NAVEGACIÓN ---
-let state = {
-    screen: 'continent',
-    selectedContinent: null,
-    selectedCountry: null,
-    selectedLottery: null,
-    baseNumberCount: 0,
-    baseNumbers: [], 
-    finalCombinations: null,
-    extraNumbers: [],
-    simLottery: null,
-    simBaseCount: 0,
-    simBaseNumbers: [],
-    simWinningNumbers: [],
-    simWinningExtraNumbers: [],
-    simResults: null,
-};
-
-const appContainer = document.getElementById('app-container');
-
+        // HISTORIAL DE NAVEGACIÓN PARA EL BOTÓN BACK
 const navigationHistory = [];
 
 function updateState(newState) {
+    // Guardar el estado anterior en el historial (solo si cambia de pantalla)
     if (newState.screen && newState.screen !== state.screen) {
         navigationHistory.push({
             screen: state.screen,
             data: { ...state }
         });
         
+        // Agregar entrada al historial del navegador
         window.history.pushState(
             { screen: newState.screen }, 
             '', 
@@ -432,648 +384,673 @@ function updateState(newState) {
     renderApp();
 }
 
+// MANEJAR EL BOTÓN BACK DEL MÓVIL
 window.addEventListener('popstate', function(event) {
     if (navigationHistory.length > 0) {
+        // Recuperar el estado anterior
         const previousState = navigationHistory.pop();
         state = { ...previousState.data };
         renderApp();
     } else {
+        // Si no hay historial, volver a la pantalla inicial
         state.screen = 'continent';
         renderApp();
     }
 });
 
+// PREVENIR QUE EL PRIMER LOAD AGREGUE AL HISTORIAL
 window.addEventListener('load', function() {
     window.history.replaceState({ screen: 'continent' }, '', '#continent');
 });
 
-function resetApp() {
-    updateState({
-        screen: 'continent',
-        selectedContinent: null,
-        selectedCountry: null,
-        selectedLottery: null,
-        baseNumberCount: 0,
-        baseNumbers: [],
-        finalCombinations: null,
-        extraNumbers: [],
-        simLottery: null,
-        simBaseCount: 0,
-        simBaseNumbers: [],
-        simWinningNumbers: [],
-        simWinningExtraNumbers: [],
-        simResults: null,
-    });
-}
-
-function goToSimSelection() {
-     updateState({ 
-        screen: 'simLotterySelection', 
-        simLottery: null, 
-        simBaseCount: 0, 
-        simBaseNumbers: [], 
-        simWinningNumbers: [],
-        simWinningExtraNumbers: []
-    });
-}
-
-function backToContinentScreen() {
-     updateState({ screen: 'continent' });
-}
-
-// --- MANEJADORES NÚMEROS BASE ---
-function addBaseNumber(num) {
-    const count = state.baseNumberCount;
-
-    if (state.baseNumbers.includes(num)) {
-        removeBaseNumber(num);
-        return; 
-    }
-    
-    if (state.baseNumbers.length >= count) {
-        alert(`Error: You have already selected the maximum of ${count} base numbers.`);
-        return;
-    }
-
-    const newNumbers = [...state.baseNumbers, num];
-    newNumbers.sort((a, b) => a - b); 
-
-    state.baseNumbers = newNumbers; 
-    renderNumberSelectionScreen(); 
-}
-
-function removeBaseNumber(num) {
-    const newNumbers = state.baseNumbers.filter(n => n !== num);
-    
-    state.baseNumbers = newNumbers;
-    renderNumberSelectionScreen(); 
-}
-
-// --- MANEJADORES NÚMEROS EXTRA ---
-function addExtraNumber(num) {
-    const extra = state.selectedLottery.extra;
-
-    if (state.extraNumbers.includes(num)) {
-        removeExtraNumber(num);
-        return; 
-    }
-    
-    if (state.extraNumbers.length >= extra.count) {
-        alert(`Error: You have already selected the maximum of ${extra.count} ${extra.name}.`);
-        return;
-    }
-
-    const newNumbers = [...state.extraNumbers, num];
-    newNumbers.sort((a, b) => a - b); 
-
-    state.extraNumbers = newNumbers; 
-    renderExtraNumbersSelectionScreen(); 
-}
-
-function removeExtraNumber(num) {
-    const newNumbers = state.extraNumbers.filter(n => n !== num);
-    
-    state.extraNumbers = newNumbers;
-    renderExtraNumbersSelectionScreen(); 
-}
-
-function autoSelectExtraNumbers() {
-    const extra = state.selectedLottery.extra;
-    const randomNumbers = getRandomUniqueNumbers(extra.count, extra.range);
-    
-    updateState({ extraNumbers: randomNumbers });
-    calculateAndGoToResults();
-}
-
-function calculateAndGoToResults() {
-    const count = state.baseNumberCount;
-    
-    const isPick5 = state.selectedLottery.type === 'pick5';
-    const formula = isPick5 ? FORMULAS_PICK5[count] : FORMULAS_PICK6[count];
-
-    const finalBets = mapBaseNumbersToCombinations(state.baseNumbers, formula);
-
-    updateState({ finalCombinations: finalBets, screen: 'results' });
-}
-
-function generateMainBets() {
-    const lotto = state.selectedLottery;
-    const count = state.baseNumberCount;
-    const selectedCount = state.baseNumbers.length;
-
-    if (selectedCount !== count) {
-        alert(`Error: You must select exactly ${count} numbers before proceeding.`);
-        return;
-    }
-    
-    if (lotto.extra) {
-        updateState({ screen: 'extraNumberSelection', extraNumbers: [] });
-    } else {
-        calculateAndGoToResults();
-    }
-}
-
-// --- MANEJADORES SIMULADOR ---
-
-function handleSimNumberSelection(number, type) {
-    const lotto = state.simLottery;
-    const baseCount = state.simBaseCount;
-    const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
-    
-    const requiredCount = (type === 'base') ? baseCount : requiredMainCount; 
-    
-    const currentArray = (type === 'base') ? state.simBaseNumbers : state.simWinningNumbers;
-    const stateKey = (type === 'base') ? 'simBaseNumbers' : 'simWinningNumbers';
-    
-    let newNumbers = [...currentArray];
-    
-    if (newNumbers.includes(number)) {
-        newNumbers = newNumbers.filter(n => n !== number);
-    } else {
-        if (newNumbers.length < requiredCount) {
-            newNumbers.push(number);
-        } else {
-            alert(`Error: Already selected the required ${requiredCount} numbers for this field.`);
-        }
-    }
-    
-    newNumbers.sort((a, b) => a - b);
-    
-    if (type === 'base') {
-        const updatedWinningNumbers = state.simWinningNumbers.filter(num => newNumbers.includes(num));
-        
-        updateState({ 
-            simBaseNumbers: newNumbers, 
-            simWinningNumbers: updatedWinningNumbers
-        });
-    } else {
-        updateState({ [stateKey]: newNumbers });
-    }
-}
-
-function handleSimExtraNumberSelection(number) {
-    const extra = state.simLottery.extra;
-    const requiredCount = extra.count;
-    let newNumbers = [...state.simWinningExtraNumbers];
-    
-    if (newNumbers.includes(number)) {
-        newNumbers = newNumbers.filter(n => n !== number);
-    } else {
-        if (newNumbers.length < requiredCount) {
-            newNumbers.push(number);
-        } else {
-            alert(`Error: Already selected the required ${requiredCount} ${extra.name}.`);
-        }
-    }
-    
-    newNumbers.sort((a, b) => a - b);
-    updateState({ simWinningExtraNumbers: newNumbers });
-}
-
-function goToSimResults() {
-    const lotto = state.simLottery;
-    const baseCount = state.simBaseCount;
-    const numType = lotto.type;
-    
-    const requiredMainCount = numType === 'pick5' ? 5 : 6;
-    const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
-    
-    if (state.simBaseNumbers.length !== baseCount) {
-        alert(`Error: Must select exactly ${baseCount} Base Numbers.`);
-        return;
-    }
-    if (state.simWinningNumbers.length !== requiredMainCount) {
-        alert(`Error: Must select exactly ${requiredMainCount} Winning Numbers.`);
-        return;
-    }
-    if (requiredExtraCount > 0 && state.simWinningExtraNumbers.length !== requiredExtraCount) {
-        alert(`Error: Must select exactly ${requiredExtraCount} Winning ${lotto.extra.name}.`);
-        return;
-    }
-    
-    const formula = numType === 'pick5' ? FORMULAS_PICK5[baseCount] : FORMULAS_PICK6[baseCount];
-    const allGeneratedBets = mapBaseNumbersToCombinations(state.simBaseNumbers, formula);
-    
-    const results = {
-        totalBets: allGeneratedBets.length,
-        mainHits: {}, 
-        extraHits: {}, 
-        totalMatches: {}, 
-    };
-
-    const winningMainSet = new Set(state.simWinningNumbers);
-    const winningExtraSet = new Set(state.simWinningExtraNumbers);
-    
-    allGeneratedBets.forEach(bet => {
-        const mainMatches = bet.filter(num => winningMainSet.has(num)).length;
-        
-        let extraMatches = 0;
-        if (requiredExtraCount > 0) {
-            extraMatches = state.simWinningExtraNumbers.filter(num => winningExtraSet.has(num)).length;
+        function resetApp() {
+            updateState({
+                screen: 'continent',
+                selectedContinent: null,
+                selectedCountry: null,
+                selectedLottery: null,
+                baseNumberCount: 0,
+                baseNumbers: [],
+                finalCombinations: null,
+                extraNumbers: [],
+                simLottery: null,
+                simBaseCount: 0,
+                simBaseNumbers: [],
+                simWinningNumbers: [],
+                simWinningExtraNumbers: [],
+                simResults: null,
+            });
         }
         
-        results.mainHits[mainMatches] = (results.mainHits[mainMatches] || 0) + 1;
+        // --- FUNCIONES DE NAVEGACIÓN PRINCIPAL ---
+
+        function goToSimSelection() {
+             updateState({ 
+                screen: 'simLotterySelection', 
+                simLottery: null, 
+                simBaseCount: 0, 
+                simBaseNumbers: [], 
+                simWinningNumbers: [],
+                simWinningExtraNumbers: []
+            });
+        }
         
-        const matchKey = `${mainMatches}+${extraMatches}`;
-        results.totalMatches[matchKey] = (results.totalMatches[matchKey] || 0) + 1;
-    });
-    
-    updateState({ simResults: results, screen: 'simResults' });
-}
+        function backToContinentScreen() {
+             updateState({ screen: 'continent' });
+        }
+        
+        // --- MANEJADORES DE EVENTOS DE NÚMEROS BASE (Generación) ---
 
-// --- 3. FUNCIONES DE RENDERIZADO ---
+        function addBaseNumber(num) {
+            const count = state.baseNumberCount;
 
-function renderContinentScreen() {
-    const html = `
-        <div class="screen active" id="continent-screen">
-            <div class="text-center mb-12 pt-6">
-                <h1 class="text-4xl font-extrabold text-yellow-300 mb-6 tracking-tight">GLOBAL LOTTO STRATEGY</h1>
-                <p class="text-gray-400 text-lg">Select Your Continent or Run Simulator</p>
-            </div>
+            // Comportamiento de toggle
+            if (state.baseNumbers.includes(num)) {
+                removeBaseNumber(num);
+                return; 
+            }
             
-            <div class="mb-8 text-center">
-                <button 
-                    onclick="goToSimSelection()" 
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-xl shadow-blue-600/50 icon-sim transform hover:scale-105"
-                >
-                    Simulador de Rendimiento
-                </button>
-            </div>
+            // Validación: Límite alcanzado
+            if (state.baseNumbers.length >= count) {
+                alert(`Error: You have already selected the maximum of ${count} base numbers.`);
+                return;
+            }
+
+            const newNumbers = [...state.baseNumbers, num];
+            newNumbers.sort((a, b) => a - b); 
+
+            state.baseNumbers = newNumbers; 
+            renderNumberSelectionScreen(); 
+        }
+
+        function removeBaseNumber(num) {
+            const newNumbers = state.baseNumbers.filter(n => n !== num);
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                ${Object.keys(LOTTERIES).map(continent => `
-                    <button
-                        onclick="updateState({ screen: 'country', selectedContinent: '${continent}' })"
-                        class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
-                    >
-                        <span>${continent}</span>
-                        <span class="icon-right text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
-                    </button>
-                `).join('')}
-            </div>
+            state.baseNumbers = newNumbers;
+            renderNumberSelectionScreen(); 
+        }
 
-            <div class="mt-12 p-4 rounded-xl bg-red-900/50 border border-red-700 shadow-xl text-center">
-                <p class="text-red-400 text-lg font-bold mb-1">⚠️ IMPORTANT DISCLAIMER & RESPONSIBLE GAMING</p>
-                <p class="text-red-300 text-sm">
-                    This application is for **entertainment and theoretical strategy only**. It is not affiliated with any official lottery organization and **does not guarantee winnings**.
-                    <br>
-                    **Gamble responsibly.** Never bet more than you can afford to lose. Must be 18+ to play. If you feel gambling is becoming a problem, seek professional help.
-                </p>
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
+        // --- MANEJADORES DE EVENTOS DE NÚMEROS EXTRA (Generación) ---
+        function addExtraNumber(num) {
+            const extra = state.selectedLottery.extra;
 
-function renderSimLotterySelectionScreen() {
-    const allLotteries = Object.values(LOTTERIES).flatMap(countries => 
-        Object.values(countries).flatMap(country => 
-            country.lotteries.map(lotto => ({
-                ...lotto,
-                country: country.nativeName,
-                flag: country.flag
-            }))
-        )
-    ).sort((a, b) => a.name.localeCompare(b.name));
-
-    const html = `
-        <div class="screen active" id="sim-lottery-selection-screen">
-            <button onclick="backToContinentScreen()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Main Menu
-            </button>
+            // Comportamiento de toggle
+            if (state.extraNumbers.includes(num)) {
+                removeExtraNumber(num);
+                return; 
+            }
             
-            <div class="text-center mb-10">
-                <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">Simulador: Select Lottery</h2>
-                <p class="text-gray-400 text-lg">Choose a lottery to test the Pyramidal Algorithm.</p>
-            </div>
+            // Validación: Límite alcanzado
+            if (state.extraNumbers.length >= extra.count) {
+                alert(`Error: You have already selected the maximum of ${extra.count} ${extra.name}.`);
+                return;
+            }
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto p-2">
-                ${allLotteries.map(lottery => {
-                    const lotteryString = JSON.stringify(lottery).replace(/"/g, '&quot;');
-                    return `
-                        <button
-                            onclick="updateState({ simLottery: ${lotteryString}, screen: 'simBaseCountSelection' })"
-                            class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-xl group transform hover:scale-[1.01]"
+            const newNumbers = [...state.extraNumbers, num];
+            newNumbers.sort((a, b) => a - b); 
+
+            state.extraNumbers = newNumbers; 
+            renderExtraNumbersSelectionScreen(); 
+        }
+
+        function removeExtraNumber(num) {
+            const newNumbers = state.extraNumbers.filter(n => n !== num);
+            
+            state.extraNumbers = newNumbers;
+            renderExtraNumbersSelectionScreen(); 
+        }
+
+        function autoSelectExtraNumbers() {
+            const extra = state.selectedLottery.extra;
+            const randomNumbers = getRandomUniqueNumbers(extra.count, extra.range);
+            
+            updateState({ extraNumbers: randomNumbers });
+            // Redirigir a resultados después de la selección automática
+            calculateAndGoToResults();
+        }
+        
+        function calculateAndGoToResults() {
+            const count = state.baseNumberCount;
+            
+            const isPick5 = state.selectedLottery.type === 'pick5';
+            const formula = isPick5 ? FORMULAS_PICK5[count] : FORMULAS_PICK6[count];
+
+            const finalBets = mapBaseNumbersToCombinations(state.baseNumbers, formula);
+
+            updateState({ finalCombinations: finalBets, screen: 'results' });
+        }
+        
+        function generateMainBets() {
+            const lotto = state.selectedLottery;
+            const count = state.baseNumberCount;
+            const selectedCount = state.baseNumbers.length;
+
+            if (selectedCount !== count) {
+                alert(`Error: You must select exactly ${count} numbers before proceeding.`);
+                return;
+            }
+            
+            if (lotto.extra) {
+                // Si hay bolas extra, vamos a la pantalla de selección de extras
+                updateState({ screen: 'extraNumberSelection', extraNumbers: [] });
+            } else {
+                // Si no hay, generamos y vamos directamente a resultados
+                calculateAndGoToResults();
+            }
+        }
+
+        // --- MANEJADORES DE EVENTOS DE NÚMEROS (Simulador) ---
+        
+        function handleSimNumberSelection(number, type) {
+            const lotto = state.simLottery;
+            const baseCount = state.simBaseCount;
+            const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
+            
+            // El count requerido es baseCount solo para los Base Numbers.
+            // Para los Winning Numbers, el count es 5 o 6.
+            const requiredCount = (type === 'base') ? baseCount : requiredMainCount; 
+            
+            const currentArray = (type === 'base') ? state.simBaseNumbers : state.simWinningNumbers;
+            const stateKey = (type === 'base') ? 'simBaseNumbers' : 'simWinningNumbers';
+            
+            let newNumbers = [...currentArray];
+            
+            if (newNumbers.includes(number)) {
+                // Quitar número
+                newNumbers = newNumbers.filter(n => n !== number);
+            } else {
+                // Añadir número
+                if (newNumbers.length < requiredCount) {
+                    newNumbers.push(number);
+                } else {
+                    alert(`Error: Already selected the required ${requiredCount} numbers for this field.`);
+                }
+            }
+            
+            newNumbers.sort((a, b) => a - b);
+            
+            // IMPORTANTE: Si los Base Numbers cambian, debemos resetear la selección de Winning Numbers, 
+            // ya que ahora la lista de ganadores permitidos ha cambiado.
+            if (type === 'base') {
+                // Filtramos los Winning Numbers que ya no están en los nuevos Base Numbers
+                const updatedWinningNumbers = state.simWinningNumbers.filter(num => newNumbers.includes(num));
+                
+                updateState({ 
+                    simBaseNumbers: newNumbers, 
+                    simWinningNumbers: updatedWinningNumbers // Aplicamos el filtro
+                });
+            } else {
+                updateState({ [stateKey]: newNumbers });
+            }
+            // Note: renderApp is called by updateState, which will call renderSimNumberInputScreen
+        }
+        
+        function handleSimExtraNumberSelection(number) {
+            const extra = state.simLottery.extra;
+            const requiredCount = extra.count;
+            let newNumbers = [...state.simWinningExtraNumbers];
+            
+            if (newNumbers.includes(number)) {
+                newNumbers = newNumbers.filter(n => n !== number);
+            } else {
+                if (newNumbers.length < requiredCount) {
+                    newNumbers.push(number);
+                } else {
+                    alert(`Error: Already selected the required ${requiredCount} ${extra.name}.`);
+                }
+            }
+            
+            newNumbers.sort((a, b) => a - b);
+            updateState({ simWinningExtraNumbers: newNumbers });
+            // Note: renderApp is called by updateState, which will call renderSimNumberInputScreen
+        }
+
+        function goToSimResults() {
+            const lotto = state.simLottery;
+            const baseCount = state.simBaseCount;
+            const numType = lotto.type;
+            
+            const requiredMainCount = numType === 'pick5' ? 5 : 6;
+            const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
+            
+            // 1. Validaciones
+            if (state.simBaseNumbers.length !== baseCount) {
+                alert(`Error: Must select exactly ${baseCount} Base Numbers.`);
+                return;
+            }
+            if (state.simWinningNumbers.length !== requiredMainCount) {
+                alert(`Error: Must select exactly ${requiredMainCount} Winning Numbers.`);
+                return;
+            }
+            if (requiredExtraCount > 0 && state.simWinningExtraNumbers.length !== requiredExtraCount) {
+                alert(`Error: Must select exactly ${requiredExtraCount} Winning ${lotto.extra.name}.`);
+                return;
+            }
+            
+            // 2. Generar apuestas con la fórmula
+            const formula = numType === 'pick5' ? FORMULAS_PICK5[baseCount] : FORMULAS_PICK6[baseCount];
+            const allGeneratedBets = mapBaseNumbersToCombinations(state.simBaseNumbers, formula);
+            
+            // 3. Comparar y contar aciertos
+            const results = {
+                totalBets: allGeneratedBets.length,
+                mainHits: {}, 
+                extraHits: {}, 
+                totalMatches: {}, 
+            };
+
+            const winningMainSet = new Set(state.simWinningNumbers);
+            const winningExtraSet = new Set(state.simWinningExtraNumbers);
+            
+            allGeneratedBets.forEach(bet => {
+                const mainMatches = bet.filter(num => winningMainSet.has(num)).length;
+                
+                let extraMatches = 0;
+                if (requiredExtraCount > 0) {
+                    // Contar cuántos números extra seleccionados están en los números extra ganadores
+                    extraMatches = state.simWinningExtraNumbers.filter(num => winningExtraSet.has(num)).length;
+                }
+                
+                // Contar aciertos principales
+                results.mainHits[mainMatches] = (results.mainHits[mainMatches] || 0) + 1;
+                
+                // Contar aciertos totales (principal + extra)
+                const matchKey = `${mainMatches}+${extraMatches}`;
+                results.totalMatches[matchKey] = (results.totalMatches[matchKey] || 0) + 1;
+            });
+            
+            // 4. Ir a la pantalla de resultados del simulador
+            updateState({ simResults: results, screen: 'simResults' });
+        }
+
+
+        // --- 3. FUNCIONES DE RENDERIZADO POR PANTALLA ---
+
+        function renderContinentScreen() {
+            const html = `
+                <div class="screen active" id="continent-screen">
+                    <div class="text-center mb-12 pt-6">
+                        <h1 class="text-4xl font-extrabold text-yellow-300 mb-6 tracking-tight">GLOBAL LOTTO STRATEGY</h1>
+                        <p class="text-gray-400 text-lg">Select Your Continent or Run Simulator</p>
+                    </div>
+                    
+                    <div class="mb-8 text-center">
+                        <button 
+                            onclick="goToSimSelection()" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-xl shadow-blue-600/50 icon-sim transform hover:scale-105"
                         >
-                            <div class="flex items-center justify-between">
-                                <div class="text-left">
-                                    <h3 class="text-2xl font-bold mb-1 text-white flex items-center gap-2">
-                                       <span class="flag-icon text-base flag-protected" translate="no">${lottery.flag}</span>
-                                        ${lottery.name}
-                                    </h3>
-                                    <p class="text-gray-400 text-sm">
-                                        ${lottery.type === 'pick5' ? 'Pick 5' : 'Pick 6'} • Range: 1-${lottery.range}
-                                        ${lottery.extra ? ` + ${lottery.extra.name}` : ''}
-                                    </p>
-                                </div>
-                                <span class="icon-right w-6 h-6 text-blue-400 group-hover:translate-x-2 transition-transform duration-300"></span>
-                            </div>
+                            Simulador de Rendimiento
                         </button>
-                    `;
-                }).join('')}
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
-
-function renderSimBaseCountSelectionScreen() {
-    const lotto = state.simLottery;
-    const formulas = lotto.type === 'pick5' ? FORMULAS_PICK5 : FORMULAS_PICK6;
-    const minNumbers = lotto.type === 'pick5' ? 8 : 9;
-    const maxNumbers = lotto.type === 'pick5' ? 15 : 16;
-    
-    const numButtons = Array.from({ length: maxNumbers - minNumbers + 1 }, (_, i) => minNumbers + i).map((numCount) => {
-        const bets = formulas[numCount]?.length || 0;
-        return `
-            <button
-                onclick="updateState({ screen: 'simNumberInput', simBaseCount: ${numCount}, simBaseNumbers: [], simWinningNumbers: [], simWinningExtraNumbers: [] })"
-                class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-lg group transform hover:scale-[1.05]"
-            >
-                <div class="text-center">
-                    <div class="text-4xl font-extrabold mb-2 text-blue-400">${numCount}</div>
-                    <div class="text-sm text-gray-400 uppercase tracking-wider">Base Numbers</div>
-                    <div class="mt-3 pt-3 border-t border-blue-500/30">
-                        <div class="text-xl font-semibold text-white">${bets}</div>
-                        <div class="text-xs text-gray-400">Total Bets</div>
                     </div>
-                </div>
-            </button>
-        `;
-    }).join('');
-
-    const html = `
-        <div class="screen active" id="sim-base-count-selection-screen">
-            <button onclick="updateState({ screen: 'simLotterySelection', simBaseCount: 0 })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Lottery Selection
-            </button>
-            
-            <div class="text-center mb-10">
-                <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulator</h2>
-                <p class="text-gray-400 text-lg">Select the amount of **Base Numbers** you want to simulate playing with.</p>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                ${numButtons}
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
-
-function renderSimNumberInputScreen() {
-    const lotto = state.simLottery;
-    const baseCount = state.simBaseCount;
-    const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
-    const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
-    const mainRange = lotto.range;
-    const extraRange = lotto.extra ? lotto.extra.range : 0;
-    
-    const availableBaseNumbers = Array.from({ length: mainRange }, (_, i) => i + 1);
-    const availableWinningNumbers = state.simBaseNumbers;
-
-    const selectedBaseCount = state.simBaseNumbers.length;
-    const selectedWinningCount = state.simWinningNumbers.length;
-    const selectedExtraCount = state.simWinningExtraNumbers.length;
-    
-    const createNumberGrid = (availableNumbers, currentNumbers, requiredCount, handler, customClass = '') => {
-        const rangeMax = availableNumbers.length > 0 ? Math.max(...availableNumbers) : 1;
-        const gridColumns = Math.min(10, Math.ceil(rangeMax / 10) > 0 ? Math.ceil(rangeMax / 10) : 10);
-        
-        if (availableNumbers.length === 0 && handler.params === 'winning') {
-            return `
-                <p class="text-center text-red-400 font-semibold p-4">
-                    First, select your Base Numbers in the section above.
-                </p>
-            `;
-        }
-
-        if (availableNumbers.length === 0 && handler.params === 'base') {
-            return `<p class="text-center text-red-400 font-semibold p-4">No available numbers in this range (1 to ${mainRange}).</p>`;
-        }
-        
-        return `
-            <div class="flex justify-center p-4">
-                <div style="display: grid; grid-template-columns: repeat(${gridColumns}, 1fr); gap: 8px;">
-                    ${availableNumbers.map(num => {
-                        let handlerCall;
-                        if (handler.name === 'handleSimExtraNumberSelection') {
-                            handlerCall = `handleSimExtraNumberSelection(${num})`;
-                        } else {
-                            handlerCall = `handleSimNumberSelection(${num}, '${handler.params}')`;
-                        }
-                        
-                        return `
-                            <button 
-                                onclick="${handlerCall}" 
-                                class="${customClass} ${currentNumbers.includes(num) ? 'selected' : ''}"
-                                ${currentNumbers.length >= requiredCount && !currentNumbers.includes(num) ? 'disabled' : ''}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${Object.keys(LOTTERIES).map(continent => `
+                            <button
+                                onclick="updateState({ screen: 'country', selectedContinent: '${continent}' })"
+                                class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
                             >
-                                ${num}
+                                <span>${continent}</span>
+                                <span class="icon-right text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
                             </button>
-                        `;
-                    }).join('')}
+                        `).join('')}
+                    </div>
+
+                    <div class="mt-12 p-4 rounded-xl bg-red-900/50 border border-red-700 shadow-xl text-center">
+                        <p class="text-red-400 text-lg font-bold mb-1">⚠️ IMPORTANT DISCLAIMER & RESPONSIBLE GAMING</p>
+                        <p class="text-red-300 text-sm">
+                            This application is for **entertainment and theoretical strategy only**. It is not affiliated with any official lottery organization and **does not guarantee winnings**.
+                            <br>
+                            **Gamble responsibly.** Never bet more than you can afford to lose. Must be 18+ to play. If you feel gambling is becoming a problem, seek professional help.
+                        </p>
+                    </div>
                 </div>
-            </div>
-        `;
-    };
+            `;
+            appContainer.innerHTML = html;
+        }
 
-    const baseGrid = createNumberGrid(availableBaseNumbers, state.simBaseNumbers, baseCount, {name: 'handleSimNumberSelection', params: 'base'}, "grid-number-button");
-    const winningGrid = createNumberGrid(availableWinningNumbers, state.simWinningNumbers, requiredMainCount, {name: 'handleSimNumberSelection', params: 'winning'}, "sim-number-button");
-    
-    let extraGrid = '';
-    if (requiredExtraCount > 0) {
-        const availableExtraNumbers = Array.from({ length: extraRange }, (_, i) => i + 1); 
-        extraGrid = createNumberGrid(availableExtraNumbers, state.simWinningExtraNumbers, requiredExtraCount, {name: 'handleSimExtraNumberSelection'}, "grid-extra-number-button");
-    }
-    
-    let winningMessage = `<p class="text-gray-400 mb-4">Select the **${requiredMainCount} Winning Numbers** **from your Base Numbers**.</p>`;
-    if (availableWinningNumbers.length === 0) {
-         winningMessage = `<p class="text-lg font-semibold text-red-400 mb-4">You must first select your ${baseCount} Base Numbers in the section above.</p>`;
-    }
+        // --- SIMULATOR SCREENS ---
 
-    const html = `
-        <div class="screen active" id="sim-number-input-screen">
-            <button onclick="updateState({ screen: 'simBaseCountSelection', simBaseNumbers: [] })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Base Count
-            </button>
+        function renderSimLotterySelectionScreen() {
+            // Recopila todas las loterías disponibles para simplificar la selección en el simulador
+            const allLotteries = Object.values(LOTTERIES).flatMap(countries => 
+                Object.values(countries).flatMap(country => 
+                    country.lotteries.map(lotto => ({
+                        ...lotto,
+                        country: country.nativeName,
+                        flag: country.flag
+                    }))
+                )
+            ).sort((a, b) => a.name.localeCompare(b.name));
+
+            const handleSelectLotto = (lottery) => {
+                updateState({ simLottery: lottery, screen: 'simBaseCountSelection' });
+            };
+
+            const html = `
+                <div class="screen active" id="sim-lottery-selection-screen">
+                    <button onclick="backToContinentScreen()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
+                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Main Menu
+                    </button>
+                    
+                    <div class="text-center mb-10">
+                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">Simulador: Select Lottery</h2>
+                        <p class="text-gray-400 text-lg">Choose a lottery to test the Pyramidal Algorithm.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto p-2">
+                        ${allLotteries.map(lottery => {
+                            const lotteryString = JSON.stringify(lottery).replace(/"/g, '&quot;');
+                            return `
+                                <button
+                                    onclick="updateState({ simLottery: ${lotteryString}, screen: 'simBaseCountSelection' })"
+                                    class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-xl group transform hover:scale-[1.01]"
+                                >
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-left">
+                                            <h3 class="text-2xl font-bold mb-1 text-white flex items-center gap-2">
+                                               <span class="flag-icon text-base flag-protected" translate="no">${lottery.flag}</span>
+                                                ${lottery.name}
+                                            </h3>
+                                            <p class="text-gray-400 text-sm">
+                                                ${lottery.type === 'pick5' ? 'Pick 5' : 'Pick 6'} • Range: 1-${lottery.range}
+                                                ${lottery.extra ? ` + ${lottery.extra.name}` : ''}
+                                            </p>
+                                        </div>
+                                        <span class="icon-right w-6 h-6 text-blue-400 group-hover:translate-x-2 transition-transform duration-300"></span>
+                                    </div>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+
+        function renderSimBaseCountSelectionScreen() {
+            const lotto = state.simLottery;
+            const formulas = lotto.type === 'pick5' ? FORMULAS_PICK5 : FORMULAS_PICK6;
+            const minNumbers = lotto.type === 'pick5' ? 8 : 9;
+            const maxNumbers = lotto.type === 'pick5' ? 15 : 16;
             
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulation</h2>
-                <p class="text-gray-400 text-lg">Define the numbers for your test.</p>
-            </div>
+            const handleSelectCount = (count) => {
+                updateState({ 
+                    screen: 'simNumberInput', 
+                    simBaseCount: count,
+                    simBaseNumbers: [], 
+                    simWinningNumbers: [],
+                    simWinningExtraNumbers: []
+                });
+            };
 
-            <div class="space-y-8">
-                <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-xl">
-                    <h3 class="text-2xl font-bold text-yellow-400 mb-4">Your Base Numbers (${selectedBaseCount}/${baseCount})</h3>
-                    <p class="text-gray-400 mb-4">Select the **${baseCount} Base Numbers** you would have played with (from 1 to ${mainRange}).</p>
-                    ${baseGrid}
-                </div>
-                
-                <div class="bg-gray-800/70 p-6 rounded-2xl border border-green-500/30 shadow-xl">
-                    <h3 class="text-2xl font-bold text-green-400 mb-4">Actual Winning Numbers (${selectedWinningCount}/${requiredMainCount})</h3>
-                    ${winningMessage}
-                    ${winningGrid}
-                </div>
-
-                ${requiredExtraCount > 0 ? `
-                    <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-xl">
-                        <h3 class="text-2xl font-bold text-red-400 mb-4">Winning ${lotto.extra.name} (${selectedExtraCount}/${requiredExtraCount})</h3>
-                        <p class="text-gray-400 mb-4">Select the **${requiredExtraCount} Winning ${lotto.extra.name}** (from 1 to ${extraRange}).</p>
-                        ${extraGrid}
-                    </div>
-                ` : ''}
-            </div>
-
-            <div class="text-center mt-8">
-                <button 
-                    onclick="goToSimResults()"
-                    class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-lg shadow-green-600/50 disabled:bg-gray-600 disabled:shadow-none icon-calc"
-                    ${selectedBaseCount !== baseCount || selectedWinningCount !== requiredMainCount || (requiredExtraCount > 0 && selectedExtraCount !== requiredExtraCount) ? 'disabled' : ''}
-                >
-                    Run Simulation
-                </button>
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
-
-function renderSimResultsScreen() {
-    const lotto = state.simLottery;
-    const results = state.simResults;
-    const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
-    const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
-    
-    const formatResults = (hits) => {
-        return Object.keys(hits)
-            .sort((a, b) => parseInt(b) - parseInt(a))
-            .filter(key => hits[key] > 0)
-            .map(key => `
-                <div class="flex justify-between items-center py-2 border-b border-gray-700 last:border-b-0">
-                    <span class="text-xl font-bold ${key >= requiredMainCount-1 ? 'text-green-400' : 'text-yellow-400'}">${key} Correct</span>
-                    <span class="text-2xl font-extrabold text-white">${hits[key]} Bets</span>
-                </div>
-            `).join('');
-    };
-
-    const formatTotalMatches = (matches) => {
-        return Object.keys(matches)
-            .sort((a, b) => {
-                const [mainA, extraA] = a.split('+').map(Number);
-                const [mainB, extraB] = b.split('+').map(Number);
-                if (mainA !== mainB) return mainB - mainA;
-                return extraB - extraA;
-            })
-            .filter(key => matches[key] > 0)
-            .map(key => {
-                const [main, extra] = key.split('+').map(Number);
-                const isTopPrize = main === requiredMainCount && extra === requiredExtraCount;
-                const isSignificant = main >= requiredMainCount - 1;
-                
+            const numButtons = Array.from({ length: maxNumbers - minNumbers + 1 }, (_, i) => minNumbers + i).map((numCount) => {
+                const bets = formulas[numCount]?.length || 0;
                 return `
-                    <div class="flex justify-between items-center py-3 border-b border-gray-700 last:border-b-0 ${isTopPrize ? 'bg-yellow-900/40 rounded-lg px-2 my-1' : ''}">
-                        <span class="text-xl font-bold ${isTopPrize ? 'text-red-400' : (isSignificant ? 'text-green-400' : 'text-gray-300')}">
-                            ${main} main ${requiredExtraCount > 0 ? `+ ${extra} ${lotto.extra.name}` : ''}
-                        </span>
-                        <span class="text-2xl font-extrabold ${isTopPrize ? 'text-red-300' : 'text-white'}">${matches[key]} Bets</span>
-                    </div>
+                    <button
+                        onclick="(${handleSelectCount})(${numCount})"
+                        class="bg-gray-800/70 backdrop-blur-sm hover:bg-gray-700/80 transition-all duration-300 p-4 rounded-xl border-2 border-blue-500/30 hover:border-blue-500 shadow-lg group transform hover:scale-[1.05]"
+                    >
+                        <div class="text-center">
+                            <div class="text-4xl font-extrabold mb-2 text-blue-400">${numCount}</div>
+                            <div class="text-sm text-gray-400 uppercase tracking-wider">Base Numbers</div>
+                            <div class="mt-3 pt-3 border-t border-blue-500/30">
+                                <div class="text-xl font-semibold text-white">${bets}</div>
+                                <div class="text-xs text-gray-400">Total Bets</div>
+                            </div>
+                        </div>
+                    </button>
                 `;
             }).join('');
-    };
 
-    const html = `
-        <div class="screen active" id="sim-results-screen">
-            <button onclick="updateState({ screen: 'simNumberInput', simResults: null })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Change Input Numbers
-            </button>
+            const html = `
+                <div class="screen active" id="sim-base-count-selection-screen">
+                    <button onclick="updateState({ screen: 'simLotterySelection', simBaseCount: 0 })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
+                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Lottery Selection
+                    </button>
+                    
+                    <div class="text-center mb-10">
+                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulator</h2>
+                        <p class="text-gray-400 text-lg">Select the amount of **Base Numbers** you want to simulate playing with.</p>
+                    </div>
 
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-bold text-green-400 mb-2 icon-money">Simulation Results for ${lotto.name}</h2>
-                <p class="text-gray-400 text-lg">Performance of ${results.totalBets} bets generated from your ${state.simBaseCount} Base Numbers.</p>
-                
-                <div class="mt-4 p-3 bg-gray-800 rounded-xl inline-block text-left border border-gray-700">
-                     <p class="text-sm text-yellow-300 font-semibold">Your Base Numbers: ${state.simBaseNumbers.join(', ')}</p>
-                     <p class="text-sm text-green-300 font-semibold">Winning Numbers: ${state.simWinningNumbers.join(', ')}</p>
-                     ${requiredExtraCount > 0 ? `<p class="text-sm text-red-300 font-semibold">Winning ${lotto.extra.name}: ${state.simWinningExtraNumbers.join(', ')}</p>` : ''}
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        ${numButtons}
+                    </div>
                 </div>
-            </div>
+            `;
+            appContainer.innerHTML = html;
+        }
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-2xl">
-                    <h3 class="text-2xl font-bold text-yellow-400 mb-4 border-b pb-2 border-yellow-500/50">Main Number Hits (1-${requiredMainCount})</h3>
-                    ${formatResults(results.mainHits)}
-                </div>
-                
-                <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-2xl">
-                    <h3 class="text-2xl font-bold text-red-400 mb-4 border-b pb-2 border-red-500/50">Total Match Performance</h3>
-                    ${formatTotalMatches(results.totalMatches)}
-                </div>
-            </div>
+        function renderSimNumberInputScreen() {
+            const lotto = state.simLottery;
+            const baseCount = state.simBaseCount;
+            const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
+            const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
+            const mainRange = lotto.range;
+            const extraRange = lotto.extra ? lotto.extra.range : 0;
             
-            <div class="mt-10 p-4 rounded-xl bg-blue-900/50 border border-blue-700 shadow-xl text-center">
-                <p class="text-blue-300 text-lg font-bold">Simulación de Inversión vs. Cobertura</p>
-                <p class="text-blue-200 text-sm">
-                    The algorithm reduced a potential full wheel of hundreds/thousands of combinations to just **${results.totalBets} bets**, achieving the high level of hits shown above.
-                </p>
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
+            // Números disponibles para las cuadrículas
+            const availableBaseNumbers = Array.from({ length: mainRange }, (_, i) => i + 1); // Rango completo
+            const availableWinningNumbers = state.simBaseNumbers; // <--- CLAVE: Solo los números base seleccionados
 
-function renderCountryScreen() {
-    const countriesData = LOTTERIES[state.selectedContinent];
-    const html = `
-        <div class="screen active" id="country-screen">
-            <button onclick="resetApp()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Continents
-            </button>
+            const selectedBaseCount = state.simBaseNumbers.length;
+            const selectedWinningCount = state.simWinningNumbers.length;
+            const selectedExtraCount = state.simWinningExtraNumbers.length;
             
-            <div class="text-center mb-10">
-                <div class="flex items-center justify-center gap-4 mb-2">
-                    <span class="flag-icon flag-protected" translate="no">${countriesData[Object.keys(countriesData)[0]].flag}</span>
-                    <h2 class="text-4xl font-bold text-white mb-2 tracking-wide">${state.selectedContinent}</h2>
-                </div>
-                <p class="text-gray-400 text-lg">Select the Country</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                ${Object.keys(countriesData).map(countryKey => {
-                    const country = countriesData[countryKey];
+            // --- Creador de Cuadrícula (Reutilizado) ---
+            const createNumberGrid = (availableNumbers, currentNumbers, requiredCount, handler, customClass = '') => {
+                // Determina la cantidad de columnas basándose en el rango más grande posible (10 es un buen max)
+                const rangeMax = availableNumbers.length > 0 ? Math.max(...availableNumbers) : 1;
+                const gridColumns = Math.min(10, Math.ceil(rangeMax / 10) > 0 ? Math.ceil(rangeMax / 10) : 10);
+                
+                // Si la lista de números disponibles está vacía, mostrar un mensaje
+                if (availableNumbers.length === 0 && handler.params === 'winning') {
                     return `
-                        <button
-                            onclick="updateState({ screen: 'lottery', selectedCountry: '${countryKey}' })"
-                            class="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-yellow-500 hover:bg-gray-700/80 transition-all duration-300 p-7 rounded-2xl shadow-lg hover:shadow-yellow-500/30 text-white text-2xl font-semibold flex items-center justify-between group transform hover:-translate-y-1"
-                        >
-                            <div class="flex items-center gap-4">
-                                <span class="flag-icon flag-protected" translate="no">${country.flag}</span>
-                                <div>
-                                    <span>${countryKey}</span>
-                                    <span class="text-sm text-gray-400 block font-normal">${country.nativeName}</span>
-                                </div>
-                            </div>
-                            <span class="icon-right text-yellow-400 group-hover:translate-x-2 transition-transform duration-300"></span>
-                        </button>
+                        <p class="text-center text-red-400 font-semibold p-4">
+                            First, select your Base Numbers in the section above.
+                        </p>
                     `;
-                }).join('')}
-            </div>
-        </div>
-    `;
-    appContainer.innerHTML = html;
-}
+                }
 
-function renderLotteryScreen() {
-    const countryData = LOTTERIES[state.selectedContinent][state.selectedCountry];
-    const lotteries = countryData.lotteries;
-    const html = `
-        <div class="screen active" id="lottery-screen">
-            <button onclick="updateState({ screen: 'country', selectedLottery: null })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
-                <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Countries
-            </button>
+                if (availableNumbers.length === 0 && handler.params === 'base') {
+                     // Esto no debería suceder si el rango es > 0, pero por si acaso.
+                    return `<p class="text-center text-red-400 font-semibold p-4">No available numbers in this range (1 to ${mainRange}).</p>`;
+                }
+                
+                return `
+                    <div class="flex justify-center p-4">
+                        <div style="display: grid; grid-template-columns: repeat(${gridColumns}, 1fr); gap: 8px;">
+                            ${availableNumbers.map(num => {
+                                // Determinar la función de llamada
+                                let handlerCall;
+                                if (handler.name === 'handleSimExtraNumberSelection') {
+                                    handlerCall = `handleSimExtraNumberSelection(${num})`;
+                                } else {
+                                    // Para handleSimNumberSelection, el segundo parámetro es el tipo ('base' o 'winning')
+                                    handlerCall = `handleSimNumberSelection(${num}, '${handler.params}')`;
+                                }
+                                
+                                return `
+                                    <button 
+                                        onclick="${handlerCall}" 
+                                        class="${customClass} ${currentNumbers.includes(num) ? 'selected' : ''}"
+                                        ${currentNumbers.length >= requiredCount && !currentNumbers.includes(num) ? 'disabled' : ''}
+                                    >
+                                        ${num}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            // Grid 1: Números Base (Rango completo)
+            const baseGrid = createNumberGrid(availableBaseNumbers, state.simBaseNumbers, baseCount, {name: 'handleSimNumberSelection', params: 'base'}, "grid-number-button");
             
-            <div class="text-center mb-10">
+            // Grid 2: Números Ganadores (Solo los números base seleccionados)
+            const winningGrid = createNumberGrid(availableWinningNumbers, state.simWinningNumbers, requiredMainCount, {name: 'handleSimNumberSelection', params: 'winning'}, "sim-number-button");
+            
+            let extraGrid = '';
+            if (requiredExtraCount > 0) {
+                // Grid 3: Bolas Extra (Rango completo de Bolas Extra)
+                const availableExtraNumbers = Array.from({ length: extraRange }, (_, i) => i + 1); 
+                extraGrid = createNumberGrid(availableExtraNumbers, state.simWinningExtraNumbers, requiredExtraCount, {name: 'handleSimExtraNumberSelection'}, "grid-extra-number-button");
+            }
+            
+            // Mensaje de estado de Winning Numbers
+            let winningMessage = `<p class="text-gray-400 mb-4">Select the **${requiredMainCount} Winning Numbers** **from your Base Numbers**.</p>`;
+            if (availableWinningNumbers.length === 0) {
+                 winningMessage = `<p class="text-lg font-semibold text-red-400 mb-4">You must first select your ${baseCount} Base Numbers in the section above.</p>`;
+            }
+
+
+            const html = `
+                <div class="screen active" id="sim-number-input-screen">
+                    <button onclick="updateState({ screen: 'simBaseCountSelection', simBaseNumbers: [] })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
+                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Base Count
+                    </button>
+                    
+                    <div class="text-center mb-8">
+                        <h2 class="text-4xl font-bold text-blue-400 mb-2 icon-sim">${lotto.name} Simulation</h2>
+                        <p class="text-gray-400 text-lg">Define the numbers for your test.</p>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-xl">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-4">Your Base Numbers (${selectedBaseCount}/${baseCount})</h3>
+                            <p class="text-gray-400 mb-4">Select the **${baseCount} Base Numbers** you would have played with (from 1 to ${mainRange}).</p>
+                            ${baseGrid}
+                        </div>
+                        
+                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-green-500/30 shadow-xl">
+                            <h3 class="text-2xl font-bold text-green-400 mb-4">Actual Winning Numbers (${selectedWinningCount}/${requiredMainCount})</h3>
+                            ${winningMessage}
+                            ${winningGrid}
+                        </div>
+
+                        ${requiredExtraCount > 0 ? `
+                            <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-xl">
+                                <h3 class="text-2xl font-bold text-red-400 mb-4">Winning ${lotto.extra.name} (${selectedExtraCount}/${requiredExtraCount})</h3>
+                                <p class="text-gray-400 mb-4">Select the **${requiredExtraCount} Winning ${lotto.extra.name}** (from 1 to ${extraRange}).</p>
+                                ${extraGrid}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button 
+                            onclick="goToSimResults()"
+                            class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-2xl py-4 px-12 rounded-full transition-colors duration-200 shadow-lg shadow-green-600/50 disabled:bg-gray-600 disabled:shadow-none icon-calc"
+                            ${selectedBaseCount !== baseCount || selectedWinningCount !== requiredMainCount || (requiredExtraCount > 0 && selectedExtraCount !== requiredExtraCount) ? 'disabled' : ''}
+                        >
+                            Run Simulation
+                        </button>
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+
+        function renderSimResultsScreen() {
+            const lotto = state.simLottery;
+            const results = state.simResults;
+            const requiredMainCount = lotto.type === 'pick5' ? 5 : 6;
+            const requiredExtraCount = lotto.extra ? lotto.extra.count : 0;
+            
+            // Función auxiliar para ordenar los resultados y dar formato
+            const formatResults = (hits) => {
+                return Object.keys(hits)
+                    .sort((a, b) => parseInt(b) - parseInt(a)) // Ordenar de mayor a menor acierto
+                    .filter(key => hits[key] > 0)
+                    .map(key => `
+                        <div class="flex justify-between items-center py-2 border-b border-gray-700 last:border-b-0">
+                            <span class="text-xl font-bold ${key >= requiredMainCount-1 ? 'text-green-400' : 'text-yellow-400'}">${key} Correct</span>
+                            <span class="text-2xl font-extrabold text-white">${hits[key]} Bets</span>
+                        </div>
+                    `).join('');
+            };
+
+            // Función para formatear los resultados totales (principal + extra)
+            const formatTotalMatches = (matches) => {
+                return Object.keys(matches)
+                    .sort((a, b) => {
+                        const [mainA, extraA] = a.split('+').map(Number);
+                        const [mainB, extraB] = b.split('+').map(Number);
+                        // Ordenar primero por aciertos principales (desc) y luego por aciertos extra (desc)
+                        if (mainA !== mainB) return mainB - mainA;
+                        return extraB - extraA;
+                    })
+                    .filter(key => matches[key] > 0)
+                    .map(key => {
+                        const [main, extra] = key.split('+').map(Number);
+                        const isTopPrize = main === requiredMainCount && extra === requiredExtraCount;
+                        const isSignificant = main >= requiredMainCount - 1; // 5/6 o 4/5
+                        
+                        return `
+                            <div class="flex justify-between items-center py-3 border-b border-gray-700 last:border-b-0 ${isTopPrize ? 'bg-yellow-900/40 rounded-lg px-2 my-1' : ''}">
+                                <span class="text-xl font-bold ${isTopPrize ? 'text-red-400' : (isSignificant ? 'text-green-400' : 'text-gray-300')}">
+                                    ${main} main ${requiredExtraCount > 0 ? `+ ${extra} ${lotto.extra.name}` : ''}
+                                </span>
+                                <span class="text-2xl font-extrabold ${isTopPrize ? 'text-red-300' : 'text-white'}">${matches[key]} Bets</span>
+                            </div>
+                        `;
+                    }).join('');
+            };
+
+
+            const html = `
+                <div class="screen active" id="sim-results-screen">
+                    <button onclick="updateState({ screen: 'simNumberInput', simResults: null })" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
+                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Change Input Numbers
+                    </button>
+
+                    <div class="text-center mb-8">
+                        <h2 class="text-4xl font-bold text-green-400 mb-2 icon-money">Simulation Results for ${lotto.name}</h2>
+                        <p class="text-gray-400 text-lg">Performance of ${results.totalBets} bets generated from your ${state.simBaseCount} Base Numbers.</p>
+                        
+                        <div class="mt-4 p-3 bg-gray-800 rounded-xl inline-block text-left border border-gray-700">
+                             <p class="text-sm text-yellow-300 font-semibold">Your Base Numbers: ${state.simBaseNumbers.join(', ')}</p>
+                             <p class="text-sm text-green-300 font-semibold">Winning Numbers: ${state.simWinningNumbers.join(', ')}</p>
+                             ${requiredExtraCount > 0 ? `<p class="text-sm text-red-300 font-semibold">Winning ${lotto.extra.name}: ${state.simWinningExtraNumbers.join(', ')}</p>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-yellow-500/30 shadow-2xl">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-4 border-b pb-2 border-yellow-500/50">Main Number Hits (1-${requiredMainCount})</h3>
+                            ${formatResults(results.mainHits)}
+                        </div>
+                        
+                        <div class="bg-gray-800/70 p-6 rounded-2xl border border-red-500/30 shadow-2xl">
+                            <h3 class="text-2xl font-bold text-red-400 mb-4 border-b pb-2 border-red-500/50">Total Match Performance</h3>
+                            ${formatTotalMatches(results.totalMatches)}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 p-4 rounded-xl bg-blue-900/50 border border-blue-700 shadow-xl text-center">
+                        <p class="text-blue-300 text-lg font-bold">Simulación de Inversión vs. Cobertura</p>
+                        <p class="text-blue-200 text-sm">
+                            The algorithm reduced a potential full wheel of hundreds/thousands of combinations to just **${results.totalBets} bets**, achieving the high level of hits shown above.
+                        </p>
+                    </div>
+                </div>
+            `;
+            appContainer.innerHTML = html;
+        }
+
+
+        // --- OTRAS PANTALLAS (No se muestran completas por brevedad, pero están en el script) ---
+        function renderCountryScreen() {
+            const countriesData = LOTTERIES[state.selectedContinent];
+            const html = `
+                <div class="screen active" id="country-screen">
+                    <button onclick="resetApp()" class="text-yellow-400 hover:text-yellow-300 mb-6 font-semibold flex items-center gap-2">
+                        <span class="icon-left w-5 h-5 transform rotate-180"></span> Back to Continents
+                    </button>
+                    
+                    <div class="text-center mb-10">
                         <div class="flex items-center justify-center gap-4 mb-2">
                             <span class="flag-icon flag-protected" translate="no">${countriesData[Object.keys(countriesData)[0]].flag}</span>
                             <h2 class="text-4xl font-bold text-white mb-2 tracking-wide">${state.selectedContinent}</h2>
@@ -1462,10 +1439,6 @@ function renderLotteryScreen() {
     </script>
 </body>
 </html>
-
-
-
-
 
 
 
