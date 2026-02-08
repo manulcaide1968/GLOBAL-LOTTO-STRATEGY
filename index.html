@@ -246,70 +246,7 @@
     </div>
 </div>
 <script>
-// ==================== SISTEMA DE LICENCIAS PAYHIP (VERSIÓN CORREGIDA V2) ====================
-const PRODUCT_SECRET_KEY = 'prod_sk_AN8BI_fb65c72d9534b727f5bdca7c27c21f2b4dd2faef';  // Esta es tu clave secreta (confírmala en Payhip si no funciona)
 
-// Verificar si ya está activada al cargar
-window.addEventListener('load', function() {
-    const saved = localStorage.getItem('lottoLicenseValid');
-    if (saved === 'true') {
-        document.body.classList.add('unlocked');
-        renderApp();
-    }
-});
-
-// Función de activación corregida (API v2 de Payhip)
-async function checkLicense() {
-    const code = document.getElementById('license-input').value.trim().toUpperCase();
-    const errorMsg = document.getElementById('error-msg');
-    const button = document.querySelector('#license-screen button');
-
-    if (!code) {
-        errorMsg.textContent = '❌ Ingresa el código completo';
-        errorMsg.style.display = 'block';
-        setTimeout(() => errorMsg.style.display = 'none', 4000);
-        return;
-    }
-
-    button.textContent = 'Verificando...';
-    button.disabled = true;
-
-    try {
-        const url = `https://payhip.com/api/v2/license/verify?license_key=${encodeURIComponent(code)}`;
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'product-secret-key': PRODUCT_SECRET_KEY
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data?.data?.enabled === true) {
-            localStorage.setItem('lottoLicenseValid', 'true');
-            document.body.classList.add('unlocked');
-            renderApp();
-            alert('¡Licencia activada correctamente! 🍀');
-        } else {
-            errorMsg.textContent = '❌ Código inválido, desactivado o ya usado';
-            errorMsg.style.display = 'block';
-            setTimeout(() => errorMsg.style.display = 'none', 5000);
-        }
-    } catch (error) {
-        console.error('Error verificando:', error);
-        errorMsg.textContent = '❌ No se pudo conectar con Payhip. Revisa internet o prueba más tarde.';
-        errorMsg.style.display = 'block';
-        setTimeout(() => errorMsg.style.display = 'none', 5000);
-    } finally {
-        button.textContent = 'Activar';
-        button.disabled = false;
-    }
-}
 
 // ==================== CÓDIGO ORIGINAL DE LA APP (SIN CAMBIOS) ====================
 
@@ -1536,6 +1473,7 @@ function renderLotteryScreen() {
     </script>
 </body>
 </html>
+
 
 
 
